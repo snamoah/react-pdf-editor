@@ -206,6 +206,14 @@ class App extends React.Component {
     });
   }
 
+  removeObject = (id: number, pageIndex: number) => {
+    const { allObjects } = this.state;
+    const pageObjects = allObjects[pageIndex];
+    pageObjects.splice(id, 1);
+    allObjects[pageIndex] = pageObjects;
+    this.setState({ allObjects });
+  }
+
   render() {
     const { allObjects, pdfName, pdfFile, pages, saving, selectedPageIndex, pageDimensions } = this.state;
     const isMultiplePages = pages.length > 1;
@@ -240,12 +248,11 @@ class App extends React.Component {
                     name={saving ? 'Saving...' : 'Save'}
                     disabled={saving}
                     onClick={this.savePDF} />
+                  <Menu.Item 
+                    name="Upload new PDF"
+                    onClick={this.handleFileInput('pdf')} />
                 </>
               )}
-              <Menu.Item 
-                name="Upload new PDF"
-                onClick={this.handleFileInput('pdf')}
-              />
               </Menu.Menu>
           </Menu>
         
@@ -272,6 +279,7 @@ class App extends React.Component {
                             if (data.type === 'image') {
                               return (
                                   <Image
+                                    removeImage={() => this.removeObject(index, selectedPageIndex)}
                                     key={`${pdfName}-${index}`}
                                     pageWidth={currentPageDimensions.width}
                                     pageHeight={currentPageDimensions.height}

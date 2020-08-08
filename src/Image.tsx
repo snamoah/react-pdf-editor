@@ -7,6 +7,7 @@ const PADDING = 25;
 interface Props {
     pageWidth: number;
     pageHeight: number;
+    removeImage: () => void;
     updateImageObject: (imageObject: Partial<ImageObject>) => void;
 }
 
@@ -46,22 +47,28 @@ export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, upd
     const renderImage = (img: HTMLImageElement) => {
         const context = canvasRef.current && canvasRef.current.getContext('2d');
         if (context) {
+            let newCanvasWidth = canvasWidth;
+            let newCanvasHeight = canvasHeight;
+
             if (canvasWidth > IMAGE_MAX_SIZE) {
                 const newScale = IMAGE_MAX_SIZE / canvasWidth;
                 setScale(newScale);
-                setCanvasWidth(canvasWidth * newScale);
+                newCanvasWidth = canvasWidth * newScale;
+                setCanvasWidth(newCanvasWidth);
             } 
 
             if (canvasHeight > IMAGE_MAX_SIZE) {
                 const newScale = IMAGE_MAX_SIZE / height; 
                 setScale(newScale);
-                setCanvasHeight(canvasHeight * newScale);
+                newCanvasHeight = canvasHeight * newScale;
+                setCanvasHeight(newCanvasHeight);
             }
 
-            context.drawImage(payload, 0, 0, canvasWidth, canvasHeight);
+            context.drawImage(payload, 0, 0, newCanvasWidth, newCanvasHeight);
 
             canvasRef.current && canvasRef.current.toBlob(blob => {
-                updateImageObject({ file: blob as File, width: canvasWidth, height: canvasHeight });
+                console.log('===> blob is in', blob);
+                updateImageObject({ file: blob as File, width: newCanvasWidth, height: newCanvasHeight });
             });
         }
     }
