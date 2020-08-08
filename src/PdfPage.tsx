@@ -10,7 +10,6 @@ export const PdfPage = ({ page }: Props) => {
     const [ height, setHeight ] = useState(window.innerHeight);
 
     const renderPage = async (p: Promise<any>) => {
-        console.log('===> rendered');
        const _page = await p;
        const context = canvasRef.current?.getContext('2d');
        const viewport = _page.getViewport({ scale: 1 });

@@ -2,21 +2,14 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css'
 
-import { Menu, Container, Segment, Header, Icon, Button, Grid } from 'semantic-ui-react';
-import { readAsPDF } from './utils/asyncReader';
+import { Menu, Container, Segment, Header, Icon, Button, Grid, Dropdown } from 'semantic-ui-react';
+import { readAsPDF, readAsDataURL, readAsImage } from './utils/asyncReader';
 import { save } from './utils/pdf';
 import { PdfPage } from './PdfPage';
+import { Image } from './Image';
+import { ggID } from './utils/helpers';
 
-interface State {
-  pdfFile?: File;
-    selectedPageIndex: number;
-    pdfName: string;
-    pages: any[];
-    allObjects: any[];
-    pagesScale: any[];
-    saving: boolean;
-    uploading: boolean;
-}
+
 
 class App extends React.Component {
 
@@ -106,16 +99,50 @@ class App extends React.Component {
     </>
   )
 
-  onUploadImage = () => {}
+  onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { selectedPageIndex } = this.state;
+    const file: File | null = e.target.files && e.target.files[0];
+    if (file && selectedPageIndex >= 0) {
+      this.addImage(file);
+    }
+  }
+
+  addImage = async (file: File) => {
+    const { allObjects, selectedPageIndex } = this.state;
+    try {
+      // get dataURL to prevent canvas from tainted
+      const url = await readAsDataURL(file);
+      const img = await readAsImage(url as any);
+      const id = ggID();
+      const { width, height } = img;
+      const object: ImageObject = {
+        id,
+        type: "image",
+        width,
+        height,
+        x: 0,
+        y: 0,
+        payload: img,
+        file
+      };
+      this.setState({
+        allObjects: allObjects.map((objects, pIndex) =>
+          pIndex === selectedPageIndex ? [...objects, object] : objects
+        )
+      });
+    } catch (e) {
+      console.log(`Fail to add image.`, e);
+    }
+  }
 
   handleFileInput = (inputName: string) => () => {
     document.getElementById(inputName)?.click();
   }
 
   renderEmpty = () => (
-    <Segment placeholder loading={this.state.uploading}>
+    <Segment placeholder loading={this.state.uploading} style={{ height: '80vh' }}>
       <Header icon>
-        <Icon name='file' />
+        <Icon name='file pdf outline' />
         Upload your PDF to start editing!
       </Header>
       <Button primary onClick={this.handleFileInput('pdf')}>Load PDF</Button>
@@ -135,9 +162,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { pdfFile, pages, saving, selectedPageIndex } = this.state;
+    const { allObjects, pdfFile, pages, saving, selectedPageIndex } = this.state;
     const isMultiplePages = pages.length > 1;
     const currentPage = pages[selectedPageIndex];
+    const allObjectsForCurrentPage = allObjects[selectedPageIndex];
 
     return (
       <Container style={{ margin: 30 }}>
@@ -145,16 +173,30 @@ class App extends React.Component {
           <Menu pointing>
             <Menu.Item header>PDF Editor</Menu.Item>
             <Menu.Menu position="right">
+              {pdfFile && (
+                <>
+                  <Dropdown 
+                    item 
+                    closeOnBlur
+                    icon="edit outline" 
+                    simple>
+                    <Dropdown.Menu>
+                      <Dropdown.Item onClick={this.handleFileInput('image')}>
+                        Add Image
+                      </Dropdown.Item>
+                      <Dropdown.Item>Add Drawing</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                  <Menu.Item
+                    name={saving ? 'Saving...' : 'Save'}
+                    disabled={saving}
+                    onClick={this.savePDF} />
+                </>
+              )}
               <Menu.Item 
                 name="Upload new PDF"
                 onClick={this.handleFileInput('pdf')}
               />
-              {pdfFile && (
-                <Menu.Item
-                  name={saving ? 'Saving...' : 'Save'}
-                  disabled={saving}
-                  onClick={this.savePDF} />
-                )}
               </Menu.Menu>
           </Menu>
         
@@ -173,7 +215,17 @@ class App extends React.Component {
                         compact
                         stacked={isMultiplePages}
                       >
-                        <PdfPage page={currentPage} />
+                        <PdfPage
+                          page={currentPage} />
+                        <div style={{ position: 'absolute', top: 0, left: 0 }}>
+                          {allObjectsForCurrentPage && allObjectsForCurrentPage.map((data, index) => (
+                            <React.Fragment key={index}>
+                              {data.type === 'image' && (
+                                <Image {...data} />
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </div>
                       </Segment>
                     )
                   }

@@ -9,7 +9,7 @@ export const readAsArrayBuffer = (file: File) => {
     });
   }
   
-  export const readAsImage = (src: Blob) => {
+  export const readAsImage = (src: Blob | string): Promise<HTMLImageElement> => {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => resolve(img);
