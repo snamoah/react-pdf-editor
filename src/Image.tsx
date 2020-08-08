@@ -1,7 +1,7 @@
 import React, { useState, createRef, useEffect } from 'react';
 
 const IMAGE_MAX_SIZE = 300;
-const PADDING = 30;
+const PADDING = 25;
 
 
 interface Props {
