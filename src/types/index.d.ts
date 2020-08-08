@@ -11,15 +11,9 @@ interface ImageObject {
   payload: HTMLImageElement;
 }
 
-type AllObjects = (ImageObject)[]
-
-interface State {
-  pdfFile?: File;
-    selectedPageIndex: number;
-    pdfName: string;
-    pages: any[];
-    allObjects: AllObjects[];
-    pagesScale: any[];
-    saving: boolean;
-    uploading: boolean;
+interface Dimensions {
+  width: number;
+  height: number;
 }
+
+type AllObjects = (ImageObject)[]

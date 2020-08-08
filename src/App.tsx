@@ -10,6 +10,17 @@ import { Image } from './Image';
 import { ggID } from './utils/helpers';
 
 
+interface State {
+  pdfFile?: File;
+    selectedPageIndex: number;
+    pdfName: string;
+    pages: any[];
+    allObjects: AllObjects[];
+    pagesScale: any[];
+    pageDimensions: Dimensions[];
+    saving: boolean;
+    uploading: boolean;
+}
 
 class App extends React.Component {
 
@@ -20,6 +31,7 @@ class App extends React.Component {
     pages: [],
     allObjects: [],
     pagesScale: [],
+    pageDimensions: [],
     saving: false,
     uploading: false,
   }
@@ -60,6 +72,7 @@ class App extends React.Component {
           .map((_, i) => pdf.getPage(i + 1)),
         allObjects: Array(pdf.numPages).fill([]),
         pagesScale: Array(pdf.numPages).fill(1),
+        pageDimensions: Array(pdf.numPages).fill({ width: 0, height: 0 }) 
       });
     } catch (e) {
       console.log("Failed to add pdf.");
@@ -91,24 +104,32 @@ class App extends React.Component {
         accept="application/pdf"
         onChange={this.onUploadPDF}
         style={{ display: 'none' }} />
-      <input
-          type="file"
-          id="image"
-          name="image"
-          style={{ display: 'none' }}
-          onChange={this.onUploadImage} />
+      { this.state.selectedPageIndex > -1 && (
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={this.onUploadImage} 
+          /> 
+        ) 
+      }
     </>
   )
 
   onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { selectedPageIndex } = this.state;
+    console.log('====> this upload image is called', selectedPageIndex);
     const file: File | null = e.target.files && e.target.files[0];
     if (file && selectedPageIndex >= 0) {
       this.addImage(file);
+      e.currentTarget.value = '';
     }
   }
 
   addImage = async (file: File) => {
+    console.log('==> add image is called', file);
     const { allObjects, selectedPageIndex } = this.state;
     try {
       // get dataURL to prevent canvas from tainted
@@ -131,6 +152,7 @@ class App extends React.Component {
           pIndex === selectedPageIndex ? [...objects, object] : objects
         )
       });
+      console.log('===> inside add image', object)
     } catch (e) {
       console.log(`Fail to add image.`, e);
     }
@@ -176,14 +198,24 @@ class App extends React.Component {
     })
   }
 
+  updatePageDimensions = (pageIndex: number, dimensions: { width: number, height: number }) => {
+    this.setState({
+      pageDimensions: this.state.pageDimensions.map((page, index) => 
+        pageIndex === index ? dimensions : page
+      )
+    });
+  }
+
   render() {
-    const { allObjects, pdfFile, pages, saving, selectedPageIndex } = this.state;
+    const { allObjects, pdfName, pdfFile, pages, saving, selectedPageIndex, pageDimensions } = this.state;
     const isMultiplePages = pages.length > 1;
+    const isLastPage = selectedPageIndex === pages.length - 1;
     const currentPage = pages[selectedPageIndex];
     const allObjectsForCurrentPage = allObjects[selectedPageIndex];
+    const currentPageDimensions = pageDimensions[selectedPageIndex];
 
-    console.log('===> ', allObjectsForCurrentPage);
 
+    console.log('===> allObject for current page', allObjectsForCurrentPage);
     return (
       <Container style={{ margin: 30 }}>
         {this.renderHiddenInputs()}
@@ -229,23 +261,28 @@ class App extends React.Component {
                 <Grid.Column width={10}>
                   {currentPage && (
                       <Segment
+                        style={{ position: 'relative' }}
                         compact
-                        stacked={isMultiplePages}
+                        stacked={isMultiplePages && !isLastPage}
                       >
                         <PdfPage
+                          updateDimensions={(dimensions) => this.updatePageDimensions(selectedPageIndex, dimensions)}
                           page={currentPage} />
-                        <div style={{ position: 'absolute', top: 0, left: 0 }}>
-                          {allObjectsForCurrentPage && allObjectsForCurrentPage.map((data, index) => (
-                            <React.Fragment key={index}>
-                              {data.type === 'image' && (
-                                <Image 
-                                  updateImageObject={(image) => this.updateObject(index, selectedPageIndex, image)}
-                                  {...data}  
-                                />
-                              )}
-                            </React.Fragment>
-                          ))}
-                        </div>
+                          {allObjectsForCurrentPage && allObjectsForCurrentPage.map((data, index) => {
+                            if (data.type === 'image') {
+                              return (
+                                  <Image
+                                    key={`${pdfName}-${index}`}
+                                    pageWidth={currentPageDimensions.width}
+                                    pageHeight={currentPageDimensions.height}
+                                    updateImageObject={(image) => this.updateObject(index, selectedPageIndex, image)}
+                                    {...data}  
+                                  />
+                              )
+                            }
+
+                            return null;
+                          })}
                       </Segment>
                     )
                   }
