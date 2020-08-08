@@ -246,11 +246,11 @@ class App extends React.Component {
                     name={saving ? 'Saving...' : 'Save'}
                     disabled={saving}
                     onClick={this.savePDF} />
-                  <Menu.Item 
-                    name="Upload new PDF"
-                    onClick={this.handleFileInput('pdf')} />
                 </>
               )}
+               <Menu.Item 
+                    name="Upload new PDF"
+                    onClick={this.handleFileInput('pdf')} />
               </Menu.Menu>
           </Menu>
         

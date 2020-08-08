@@ -18,7 +18,7 @@ const scripts: Script[] = [
       name: 'download',
       src: 'https://unpkg.com/downloadjs@1.4.7',
     },
-    { name: 'makeTextPDF', src: '/react-pdf-editor/makeTextPDF.js' },
+    { name: 'makeTextPDF', src: 'https://cdn.jsdelivr.net/gh/snamoah/react-pdf-editor/public/makeTextPDF.js' },
 ];
   
 const assets: { [key: string]: any } = {};
