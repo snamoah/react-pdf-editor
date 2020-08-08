@@ -120,7 +120,6 @@ class App extends React.Component {
 
   onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { selectedPageIndex } = this.state;
-    console.log('====> this upload image is called', selectedPageIndex);
     const file: File | null = e.target.files && e.target.files[0];
     if (file && selectedPageIndex >= 0) {
       this.addImage(file);
@@ -129,7 +128,6 @@ class App extends React.Component {
   }
 
   addImage = async (file: File) => {
-    console.log('==> add image is called', file);
     const { allObjects, selectedPageIndex } = this.state;
     try {
       // get dataURL to prevent canvas from tainted
@@ -152,7 +150,6 @@ class App extends React.Component {
           pIndex === selectedPageIndex ? [...objects, object] : objects
         )
       });
-      console.log('===> inside add image', object)
     } catch (e) {
       console.log(`Fail to add image.`, e);
     }
