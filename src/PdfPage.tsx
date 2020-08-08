@@ -13,7 +13,6 @@ export const PdfPage = ({ page, updateDimensions }: Props) => {
     const renderPage = async (p: Promise<any>) => {
        const _page = await p;
        if (_page) {
-           console.log('===> _page', _page);
            const context = canvasRef.current?.getContext('2d');
            const viewport = _page.getViewport({ scale: 1 });
     

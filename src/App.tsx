@@ -221,9 +221,7 @@ class App extends React.Component {
     const currentPage = pages[selectedPageIndex];
     const allObjectsForCurrentPage = allObjects[selectedPageIndex];
     const currentPageDimensions = pageDimensions[selectedPageIndex];
-
-
-    console.log('===> allObject for current page', allObjectsForCurrentPage);
+  
     return (
       <Container style={{ margin: 30 }}>
         {this.renderHiddenInputs()}
