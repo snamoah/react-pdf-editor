@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "712ed4c2b68039852d29d8163543f7cc",
+    "revision": "40926ca251bc6377c6b7b5dd859c6a2c",
     "url": "/react-pdf-editor/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-pdf-editor/static/css/2.825bb5ce.chunk.css"
   },
   {
-    "revision": "e2ca371c821c2bf6405a",
+    "revision": "3c8214f98aaa5d787358",
     "url": "/react-pdf-editor/static/css/main.9559e866.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-pdf-editor/static/js/2.79861f3c.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "e2ca371c821c2bf6405a",
-    "url": "/react-pdf-editor/static/js/main.40bacad8.chunk.js"
+    "revision": "3c8214f98aaa5d787358",
+    "url": "/react-pdf-editor/static/js/main.0f0b976d.chunk.js"
   },
   {
     "revision": "20eca66ab685b8ddecd0",
