@@ -88,6 +88,7 @@ class App extends React.Component {
         type="file"
         name="pdf"
         id="pdf"
+        accept="application/pdf"
         onChange={this.onUploadPDF}
         style={{ display: 'none' }} />
       <input
@@ -161,11 +162,27 @@ class App extends React.Component {
     }))
   }
 
+  updateObject = (id: number, pageIndex: number, payload: Partial<ImageObject>) => {
+    const { allObjects } = this.state;
+    let pageObjects = allObjects[pageIndex];
+    const objectToUpdate = pageObjects[id];
+    const newObject: ImageObject = { ...objectToUpdate, ...payload };
+    pageObjects[id] = newObject;
+
+    this.setState({
+      allObjects: allObjects.map((objects, index) =>
+        pageIndex === index ? pageObjects : objects
+      )
+    })
+  }
+
   render() {
     const { allObjects, pdfFile, pages, saving, selectedPageIndex } = this.state;
     const isMultiplePages = pages.length > 1;
     const currentPage = pages[selectedPageIndex];
     const allObjectsForCurrentPage = allObjects[selectedPageIndex];
+
+    console.log('===> ', allObjectsForCurrentPage);
 
     return (
       <Container style={{ margin: 30 }}>
@@ -221,7 +238,10 @@ class App extends React.Component {
                           {allObjectsForCurrentPage && allObjectsForCurrentPage.map((data, index) => (
                             <React.Fragment key={index}>
                               {data.type === 'image' && (
-                                <Image {...data} />
+                                <Image 
+                                  updateImageObject={(image) => this.updateObject(index, selectedPageIndex, image)}
+                                  {...data}  
+                                />
                               )}
                             </React.Fragment>
                           ))}
