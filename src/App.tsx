@@ -1,20 +1,26 @@
+
 import React from 'react';
-import logo from './logo.svg';
-import { Provider, defaultTheme, Header, Grid, View, Flex, Text, Button } from '@adobe/react-spectrum';
+import 'semantic-ui-css/semantic.min.css'
+
+import { Menu, Container, Segment, Header, Icon, Button, Grid } from 'semantic-ui-react';
 import { readAsPDF } from './utils/asyncReader';
 import { save } from './utils/pdf';
+import { PdfPage } from './PdfPage';
 
-class App extends React.Component {
-
-  state: {
-    pdfFile?: File;
+interface State {
+  pdfFile?: File;
     selectedPageIndex: number;
     pdfName: string;
     pages: any[];
     allObjects: any[];
     pagesScale: any[];
     saving: boolean;
-  } = {
+    uploading: boolean;
+}
+
+class App extends React.Component {
+
+  state: State = {
     pdfFile: undefined,
     selectedPageIndex: -1,
     pdfName: '',
@@ -22,9 +28,11 @@ class App extends React.Component {
     allObjects: [],
     pagesScale: [],
     saving: false,
+    uploading: false,
   }
 
   onUploadPDF = async (e: React.ChangeEvent<HTMLInputElement>  & { dataTransfer?: DataTransfer }) => {
+    this.setState({ uploading: true });
     const files: FileList | undefined =  e.target.files || (e.dataTransfer && e.dataTransfer.files);
     if (!files) return;
     
@@ -43,6 +51,8 @@ class App extends React.Component {
       });
     } catch (e) {
       console.log(e);
+    } finally {
+      this.setState({ uploading: false })
     }
   }
 
@@ -79,52 +89,104 @@ class App extends React.Component {
     }
   }
 
-  handleFileInput = (inputName: string) => () =>
-    document.getElementById(inputName)?.click();
-
-  render() {
-    return (
-      <Provider theme={defaultTheme} colorScheme="light">
-        <Grid
-          areas={['header header', 'body body']}
-        >
-          <View gridArea="header" padding="size-250" backgroundColor="static-white">
-            <Flex direction="row">
-              <View width="size-1000" alignSelf="center">
-                <Text>PDF Editor</Text>
-              </View>
-              <Flex direction="row" alignItems="end" gap="size-100">
-                <View backgroundColor="red-400">
-                  <input
-                    type="file"
-                    name="pdf"
-                    id="pdf"
-                    onChange={this.onUploadPDF}
-                    style={{ display: 'none' }} />
-                  <Button variant="cta" onPress={this.handleFileInput('pdf')}>Upload File</Button>
-                </View>
-                <View>
-                  <Button alignSelf="flex-end"  variant="cta" onPress={this.handleFileInput('image')}>Upload Image</Button>
-                </View>
-              </Flex>
-            </Flex>
-          </View>
-          <View gridArea="body">
-
-          </View>
-        </Grid>
-        <section>
-        
-        {/* <input
+  renderHiddenInputs = () => (
+    <>
+      <input
+        type="file"
+        name="pdf"
+        id="pdf"
+        onChange={this.onUploadPDF}
+        style={{ display: 'none' }} />
+      <input
           type="file"
           id="image"
           name="image"
-          className="hidden"
-          onChange={onUploadImage} /> */}
+          style={{ display: 'none' }}
+          onChange={this.onUploadImage} />
+    </>
+  )
 
-        <button onClick={this.savePDF}>{this.state.saving ? 'Saving' : 'Save' }</button>
-        </section>
-      </Provider>
+  onUploadImage = () => {}
+
+  handleFileInput = (inputName: string) => () => {
+    document.getElementById(inputName)?.click();
+  }
+
+  renderEmpty = () => (
+    <Segment placeholder loading={this.state.uploading}>
+      <Header icon>
+        <Icon name='file' />
+        Upload your PDF to start editing!
+      </Header>
+      <Button primary onClick={this.handleFileInput('pdf')}>Load PDF</Button>
+    </Segment>
+  );
+
+  nextPage = () => {
+    this.setState((prevState: State) => ({
+      selectedPageIndex: prevState.selectedPageIndex + 1,
+    }))
+  }
+
+  previousPage = () => { 
+    this.setState((prevState: State) => ({
+      selectedPageIndex: prevState.selectedPageIndex - 1,
+    }))
+  }
+
+  render() {
+    const { pdfFile, pages, saving, selectedPageIndex } = this.state;
+    const isMultiplePages = pages.length > 1;
+    const currentPage = pages[selectedPageIndex];
+
+    return (
+      <Container style={{ margin: 30 }}>
+        {this.renderHiddenInputs()}
+          <Menu pointing>
+            <Menu.Item header>PDF Editor</Menu.Item>
+            <Menu.Menu position="right">
+              <Menu.Item 
+                name="Upload new PDF"
+                onClick={this.handleFileInput('pdf')}
+              />
+              {pdfFile && (
+                <Menu.Item
+                  name={saving ? 'Saving...' : 'Save'}
+                  disabled={saving}
+                  onClick={this.savePDF} />
+                )}
+              </Menu.Menu>
+          </Menu>
+        
+        
+        {!pdfFile ? this.renderEmpty() : (
+          <Grid>
+              <Grid.Row>
+                <Grid.Column width={3} verticalAlign="middle">
+                  {isMultiplePages && selectedPageIndex !== 0 && (
+                    <Button circular icon="angle left" onClick={this.previousPage} />
+                  )}
+                </Grid.Column>
+                <Grid.Column width={10}>
+                  {currentPage && (
+                      <Segment
+                        compact
+                        stacked={isMultiplePages}
+                      >
+                        <PdfPage page={currentPage} />
+                      </Segment>
+                    )
+                  }
+                </Grid.Column>
+                <Grid.Column width={3} verticalAlign="middle" textAlign="right">
+                  {isMultiplePages && selectedPageIndex !== pages.length - 1 && (
+                    <Button circular icon="angle right" onClick={this.nextPage}/>
+                  )}
+                </Grid.Column>
+              </Grid.Row>
+          </Grid>
+        )}
+      </Container>
     );
 
   }
