@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import { Provider, defaultTheme, Header, Grid, View, Flex, Text, Button } from '@adobe/react-spectrum';
 import { readAsPDF } from './utils/asyncReader';
 import { save } from './utils/pdf';
 
@@ -79,31 +79,42 @@ class App extends React.Component {
     }
   }
 
+  handleFileInput = (inputName: string) => () =>
+    document.getElementById(inputName)?.click();
+
   render() {
-    console.log('===> this.state', this.state);
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <Provider theme={defaultTheme} colorScheme="light">
+        <Grid
+          areas={['header header', 'body body']}
+        >
+          <View gridArea="header" padding="size-250" backgroundColor="static-white">
+            <Flex direction="row">
+              <View width="size-1000" alignSelf="center">
+                <Text>PDF Editor</Text>
+              </View>
+              <Flex direction="row" alignItems="end" gap="size-100">
+                <View backgroundColor="red-400">
+                  <input
+                    type="file"
+                    name="pdf"
+                    id="pdf"
+                    onChange={this.onUploadPDF}
+                    style={{ display: 'none' }} />
+                  <Button variant="cta" onPress={this.handleFileInput('pdf')}>Upload File</Button>
+                </View>
+                <View>
+                  <Button alignSelf="flex-end"  variant="cta" onPress={this.handleFileInput('image')}>Upload Image</Button>
+                </View>
+              </Flex>
+            </Flex>
+          </View>
+          <View gridArea="body">
+
+          </View>
+        </Grid>
         <section>
-        <input
-        type="file"
-        name="pdf"
-        id="pdf"
-        onChange={this.onUploadPDF}
-        className="hidden" />
+        
         {/* <input
           type="file"
           id="image"
@@ -113,7 +124,7 @@ class App extends React.Component {
 
         <button onClick={this.savePDF}>{this.state.saving ? 'Saving' : 'Save' }</button>
         </section>
-      </div>
+      </Provider>
     );
 
   }
