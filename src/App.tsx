@@ -9,7 +9,7 @@ import { PdfPage } from './components/PdfPage';
 import { Image } from './containers/Image';
 import { ggID } from './utils/helpers';
 import { DrawingModal } from './components/DrawingModal';
-import { Drawing } from './components/Drawing';
+import { Drawing } from './containers/Drawing';
 
 
 interface State {

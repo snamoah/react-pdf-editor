@@ -1,6 +1,7 @@
 import React, { RefObject } from 'react';
-import { Dimmer, Header, Button } from 'semantic-ui-react';
+import { Dimmer } from 'semantic-ui-react';
 import { Div } from '../ui/components/Div';
+import { ConfirmContent } from './ConfirmContent';
 
 const ADJUSTERS_DIMENSIONS = 20;
 
@@ -38,14 +39,6 @@ export const Image: React.FC<Props> = ({
     onClick
 }) => {
 
-    const deleteContent = (
-        <div>
-            <Header as='h4' inverted>Delete?</Header>
-
-            <Button onClick={cancelDelete}>No</Button>
-            <Button negative onClick={deleteImage}>Yes</Button>
-        </div>
-    );
 
     return ( 
         <div
@@ -79,7 +72,11 @@ export const Image: React.FC<Props> = ({
                     }}
                 />
                 <Dimmer active={dimmerActive} onClickOutside={cancelDelete}>
-                    {deleteContent}
+                    <ConfirmContent 
+                        title="Delete?" 
+                        onConfirm={deleteImage}
+                        onDismiss={cancelDelete}
+                    />
                 </Dimmer>
             </Dimmer.Dimmable>
             <div
