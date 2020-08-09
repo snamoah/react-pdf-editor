@@ -6,7 +6,7 @@ import { Menu, Container, Segment, Header, Icon, Button, Grid, Dropdown } from '
 import { readAsPDF, readAsDataURL, readAsImage } from './utils/asyncReader';
 import { save } from './utils/pdf';
 import { PdfPage } from './components/PdfPage';
-import { Image } from './components/Image';
+import { Image } from './containers/Image';
 import { ggID } from './utils/helpers';
 import { DrawingModal } from './components/DrawingModal';
 import { Drawing } from './components/Drawing';

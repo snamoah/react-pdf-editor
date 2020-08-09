@@ -27,3 +27,5 @@ interface Dimensions {
 type Attachment = ImageObject | DrawingObject;
 
 type AllObjects = Attachment[]
+
+type DragEventListener<T> = (e: React.MouseEvent<T>) => void;
