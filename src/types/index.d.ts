@@ -1,19 +1,20 @@
-type ObjectType = 'image' | 'text';
+type AttachmentType = 'image' | 'text' | 'drawing';
 
-interface ImageObject {
+interface AttachmentBase {
   id: () => number;
-  type: ObjectType;
   width: number;
   height: number;
-  file: File;
   x: number;
   y: number;
+  type: AttachmentType;
+}
+interface ImageObject extends AttachmentBase {
+  file: File;
   payload: HTMLImageElement;
 }
 
-interface DrawingObject {
-  x: number;
-  y: number;
+interface DrawingObject extends AttachmentBase {
+  path?: string;
 }
 
 interface Dimensions {
@@ -21,4 +22,6 @@ interface Dimensions {
   height: number;
 }
 
-type AllObjects = (ImageObject)[]
+type Attachment = ImageObject | DrawingObject;
+
+type AllObjects = Attachment[]

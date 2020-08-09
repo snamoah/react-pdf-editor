@@ -9,6 +9,7 @@ import { PdfPage } from './PdfPage';
 import { Image } from './Image';
 import { ggID } from './utils/helpers';
 import { DrawingModal } from './DrawingModal';
+import { Drawing } from './components/Drawing';
 
 
 interface State {
@@ -22,6 +23,7 @@ interface State {
     saving: boolean;
     drawing: boolean;
     uploading: boolean;
+    selectedDrawing: number;
 }
 
 class App extends React.Component {
@@ -37,6 +39,7 @@ class App extends React.Component {
     saving: false,
     drawing: false,
     uploading: false,
+    selectedDrawing: 0,
   }
 
   onUploadPDF = async (e: React.ChangeEvent<HTMLInputElement>  & { dataTransfer?: DataTransfer }) => {
@@ -188,7 +191,7 @@ class App extends React.Component {
     const { allObjects } = this.state;
     let pageObjects = allObjects[pageIndex];
     const objectToUpdate = pageObjects[id];
-    const newObject: ImageObject = { ...objectToUpdate, ...payload };
+    const newObject: Attachment = { ...objectToUpdate, ...(payload as Attachment)};
     pageObjects[id] = newObject;
 
     this.setState({
@@ -226,6 +229,25 @@ class App extends React.Component {
     })
   }
 
+  addDrawing = (pageIndex: number, drawing?: { width: number, height: number, path: string }) => {
+    const { allObjects } = this.state;
+    if (!drawing) return;
+
+    const newObject: DrawingObject = {
+      id: ggID(),
+      type: 'drawing',
+      ...drawing,
+      x: 0,
+      y: 0,
+    }
+
+    this.setState({
+      allObjects: allObjects.map((objects, index) =>
+        pageIndex === index ? [...objects, newObject] : objects
+      )
+    })
+  }
+
   render() {
     const { allObjects, pdfName, pdfFile, pages, saving, selectedPageIndex, pageDimensions } = this.state;
     const isMultiplePages = pages.length > 1;
@@ -234,6 +256,7 @@ class App extends React.Component {
     const allObjectsForCurrentPage = allObjects[selectedPageIndex];
     const currentPageDimensions = pageDimensions[selectedPageIndex];
   
+    console.log('====> allObjects for current page', allObjectsForCurrentPage)
     return (
       <Container style={{ margin: 30 }}>
         {this.renderHiddenInputs()}
@@ -286,19 +309,28 @@ class App extends React.Component {
                           updateDimensions={(dimensions) => this.updatePageDimensions(selectedPageIndex, dimensions)}
                           page={currentPage} />
                           {allObjectsForCurrentPage && allObjectsForCurrentPage.map((data, index) => {
+                            const key = `${pdfName}-${index}`;
                             if (data.type === 'image') {
                               return (
                                   <Image
                                     removeImage={() => this.removeObject(index, selectedPageIndex)}
-                                    key={`${pdfName}-${index}`}
+                                    key={key}
                                     pageWidth={currentPageDimensions.width}
                                     pageHeight={currentPageDimensions.height}
                                     updateImageObject={(image) => this.updateObject(index, selectedPageIndex, image)}
-                                    {...data}  
+                                    {...(data as ImageObject)}  
                                   />
                               )
                             }
 
+                            if (data.type === 'drawing') {
+                              return (
+                                <Drawing
+                                  key={key}
+                                  {...data as DrawingObject}
+                                />
+                              )
+                            }
                             return null;
                           })}
                       </Segment>
@@ -318,7 +350,7 @@ class App extends React.Component {
           <DrawingModal 
             open={this.state.drawing} 
             dismiss={this.closeDrawingModal}
-            confirm={this.closeDrawingModal}
+            confirm={(drawingAttachment) => this.addDrawing(selectedPageIndex, drawingAttachment)}
           />
         }
       </Container>

@@ -1,21 +1,23 @@
 import React, { useState, createRef, useEffect } from 'react';
-import { Modal, Button, Container } from "semantic-ui-react";
+import { Modal, Button } from "semantic-ui-react";
 
 interface Props {
     open: boolean;
     dismiss: () => void;
-    confirm: () => void;
+    confirm: (drawing?: { width: number, height: number, path: string }) => void;
     drawing?: DrawingObject;
 }
 
 export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
     const svgRef = createRef<SVGSVGElement>();
     const [paths, setPaths] = useState<Array<[string, number, number]>>([]);
-    const [path, setPath] = useState('');
+    const [path, setPath] = useState((drawing && drawing.path) || '');
     const [svgX, setSvgX] = useState(0);
     const [svgY, setSvgY] = useState(0);
-    const [positionX, setPositionX] = useState(drawing && drawing.x || 0);
-    const [positionY, setPositionY] = useState(drawing && drawing.y || 0);
+    const [minX, setMinX] = useState(Infinity);
+    const [maxX, setMaxX] = useState(0);
+    const [minY, setMinY] = useState(Infinity);
+    const[ maxY, setMaxY] = useState(0);
     const [mouseDown, setMouseDown] = useState(false);
 
     useEffect(() => {
@@ -32,6 +34,10 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
 
         const x = event.clientX - svgX;
         const y = event.clientY - svgY;
+        setMinX(Math.min(minX, x));
+        setMaxX(Math.max(maxX, x));
+        setMinY(Math.min(minY, y));
+        setMaxY(Math.max(maxY, y));
         setPath(path + `M${x},${y}`);
         setPaths([...paths, ['M', x, y]]);
     }
@@ -42,6 +48,10 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
 
         const x = event.clientX - svgX;
         const y = event.clientY - svgY;
+        setMinX(Math.min(minX, x));
+        setMaxX(Math.max(maxX, x));
+        setMinY(Math.min(minY, y));
+        setMaxY(Math.max(maxY, y));
         setPath(path + `L${x},${y}`);
         setPaths([...paths, ['L', x, y]]);
     }
@@ -51,10 +61,48 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
         setMouseDown(false);
     }
 
+    const resetDrawingBoard = () => {
+        setPaths([]);
+        setPath('');
+        setMinX(Infinity);
+        setMaxX(0);
+        setMinY(Infinity);
+        setMaxY(0);
+    }
+
+    const handleDone = () => {
+        if (!paths.length) {
+            confirm();
+            return;
+        }
+        
+        const boundingWidth = maxX - minX;
+        const boundingHeight = maxY - minY;
+        
+        const dx = -(minX - 10);
+        const dy = -(minY - 10);
+
+        confirm({
+            width: boundingWidth + 20,
+            height: boundingHeight + 20,
+            path: paths.reduce((fullPath, lineItem) => 
+                `${fullPath}${lineItem[0]}${lineItem[1] + dx}, ${lineItem[2] + dy}`
+            , ''),
+        });  
+
+        closeModal();
+    }
+
+    const closeModal = () => {
+        resetDrawingBoard();
+        dismiss();
+    }
+
     return (
         <Modal 
             size="small"
             open={open}
+            onClose={closeModal}
         >
             <Modal.Header>Add your Drawing</Modal.Header>
             <Modal.Content>
@@ -63,9 +111,6 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
                 >
-                    <div>
-
-                    </div>
                     <svg 
                         ref={svgRef}
                         style={{
@@ -87,12 +132,12 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
                 <Button
                     color="black"
                     content="Cancel"
-                    onClick={dismiss} />
+                    onClick={closeModal} />
                 <Button
                     content="Done"
                     labelPosition="right"
                     icon="checkmark"
-                    onClick={confirm}
+                    onClick={handleDone}
                     positive />
             </Modal.Actions>
         </Modal>
