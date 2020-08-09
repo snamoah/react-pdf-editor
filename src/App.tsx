@@ -101,6 +101,10 @@ class App extends React.Component {
     }
   }
 
+  clearInput = (event: React.MouseEvent<HTMLInputElement>) => {
+    event.currentTarget.value = '';
+  }
+
   renderHiddenInputs = () => (
     <>
       <input
@@ -109,6 +113,7 @@ class App extends React.Component {
         id="pdf"
         accept="application/pdf"
         onChange={this.onUploadPDF}
+        onClick={this.clearInput}
         style={{ display: 'none' }} />
       { this.state.selectedPageIndex > -1 && (
           <input
@@ -116,6 +121,7 @@ class App extends React.Component {
             id="image"
             name="image"
             accept="image/*"
+            onClick={this.clearInput}
             style={{ display: 'none' }}
             onChange={this.onUploadImage} 
           /> 
@@ -129,7 +135,6 @@ class App extends React.Component {
     const file: File | null = e.target.files && e.target.files[0];
     if (file && selectedPageIndex >= 0) {
       this.addImage(file);
-      e.currentTarget.value = '';
     }
   }
 
