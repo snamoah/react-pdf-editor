@@ -5,10 +5,10 @@ import 'semantic-ui-css/semantic.min.css'
 import { Menu, Container, Segment, Header, Icon, Button, Grid, Dropdown } from 'semantic-ui-react';
 import { readAsPDF, readAsDataURL, readAsImage } from './utils/asyncReader';
 import { save } from './utils/pdf';
-import { PdfPage } from './PdfPage';
-import { Image } from './Image';
+import { PdfPage } from './components/PdfPage';
+import { Image } from './components/Image';
 import { ggID } from './utils/helpers';
-import { DrawingModal } from './DrawingModal';
+import { DrawingModal } from './components/DrawingModal';
 import { Drawing } from './components/Drawing';
 
 
