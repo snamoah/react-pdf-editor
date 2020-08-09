@@ -1,26 +1,26 @@
 {
   "files": {
     "main.css": "/react-pdf-editor/static/css/main.9559e866.chunk.css",
-    "main.js": "/react-pdf-editor/static/js/main.4d64a3e8.chunk.js",
-    "main.js.map": "/react-pdf-editor/static/js/main.4d64a3e8.chunk.js.map",
+    "main.js": "/react-pdf-editor/static/js/main.32d9ef7e.chunk.js",
+    "main.js.map": "/react-pdf-editor/static/js/main.32d9ef7e.chunk.js.map",
     "runtime-main.js": "/react-pdf-editor/static/js/runtime-main.b8140c16.js",
     "runtime-main.js.map": "/react-pdf-editor/static/js/runtime-main.b8140c16.js.map",
     "static/css/2.825bb5ce.chunk.css": "/react-pdf-editor/static/css/2.825bb5ce.chunk.css",
-    "static/js/2.79861f3c.chunk.js": "/react-pdf-editor/static/js/2.79861f3c.chunk.js",
-    "static/js/2.79861f3c.chunk.js.map": "/react-pdf-editor/static/js/2.79861f3c.chunk.js.map",
+    "static/js/2.924d54e0.chunk.js": "/react-pdf-editor/static/js/2.924d54e0.chunk.js",
+    "static/js/2.924d54e0.chunk.js.map": "/react-pdf-editor/static/js/2.924d54e0.chunk.js.map",
     "index.html": "/react-pdf-editor/index.html",
-    "precache-manifest.c9564c21806d5c10b4b408e8d7c6ac07.js": "/react-pdf-editor/precache-manifest.c9564c21806d5c10b4b408e8d7c6ac07.js",
+    "precache-manifest.c85347af4bfa9cd460de7192b8f86ca1.js": "/react-pdf-editor/precache-manifest.c85347af4bfa9cd460de7192b8f86ca1.js",
     "service-worker.js": "/react-pdf-editor/service-worker.js",
     "static/css/2.825bb5ce.chunk.css.map": "/react-pdf-editor/static/css/2.825bb5ce.chunk.css.map",
     "static/css/main.9559e866.chunk.css.map": "/react-pdf-editor/static/css/main.9559e866.chunk.css.map",
-    "static/js/2.79861f3c.chunk.js.LICENSE.txt": "/react-pdf-editor/static/js/2.79861f3c.chunk.js.LICENSE.txt",
+    "static/js/2.924d54e0.chunk.js.LICENSE.txt": "/react-pdf-editor/static/js/2.924d54e0.chunk.js.LICENSE.txt",
     "static/media/semantic.min.css": "/react-pdf-editor/static/media/outline-icons.ef60a4f6.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.b8140c16.js",
     "static/css/2.825bb5ce.chunk.css",
-    "static/js/2.79861f3c.chunk.js",
+    "static/js/2.924d54e0.chunk.js",
     "static/css/main.9559e866.chunk.css",
-    "static/js/main.4d64a3e8.chunk.js"
+    "static/js/main.32d9ef7e.chunk.js"
   ]
 }

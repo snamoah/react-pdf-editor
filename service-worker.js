@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/react-pdf-editor/precache-manifest.c9564c21806d5c10b4b408e8d7c6ac07.js"
+  "/react-pdf-editor/precache-manifest.c85347af4bfa9cd460de7192b8f86ca1.js"
 );
 
 self.addEventListener('message', (event) => {
