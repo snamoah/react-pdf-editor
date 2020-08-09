@@ -101,6 +101,7 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
     return (
         <Modal 
             size="small"
+            dimmer="inverted"
             open={open}
             onClose={closeModal}
         >

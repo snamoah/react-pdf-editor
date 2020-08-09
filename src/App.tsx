@@ -10,6 +10,7 @@ import { Image } from './containers/Image';
 import { ggID } from './utils/helpers';
 import { DrawingModal } from './components/DrawingModal';
 import { Drawing } from './containers/Drawing';
+import { HelpModal } from './components/HelpModal';
 
 
 interface State {
@@ -24,6 +25,7 @@ interface State {
     drawing: boolean;
     uploading: boolean;
     selectedDrawing: number;
+    helpModalOpen: boolean;
 }
 
 class App extends React.Component {
@@ -42,6 +44,7 @@ class App extends React.Component {
     drawing: false,
     uploading: false,
     selectedDrawing: 0,
+    helpModalOpen: false,
   }
 
   constructor() {
@@ -303,13 +306,18 @@ class App extends React.Component {
                   <Menu.Item
                     name={saving ? 'Saving...' : 'Save'}
                     disabled={saving}
-                    onClick={this.savePDF} />
+                    onClick={this.savePDF} 
+                  />
+                  <Menu.Item 
+                    name="Upload New"
+                    onClick={this.handleFileInput('pdf')} 
+                  />
                 </>
               )}
-               <Menu.Item 
-                    name="Upload new PDF"
-                    onClick={this.handleFileInput('pdf')} />
-              </Menu.Menu>
+              <Menu.Item onClick={() => this.setState({ helpModalOpen: true })}>
+                <Icon name="question circle outline" />
+              </Menu.Item>
+            </Menu.Menu>
           </Menu>
         
         
@@ -380,6 +388,11 @@ class App extends React.Component {
             confirm={(drawingAttachment) => this.addDrawing(selectedPageIndex, drawingAttachment)}
           />
         }
+
+        {<HelpModal 
+          open={this.state.helpModalOpen}
+          dismiss={() => this.setState({ helpModalOpen: false })}
+           />}
       </Container>
     );
 
