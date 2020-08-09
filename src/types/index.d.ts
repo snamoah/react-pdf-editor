@@ -11,6 +11,11 @@ interface ImageObject {
   payload: HTMLImageElement;
 }
 
+interface DrawingObject {
+  x: number;
+  y: number;
+}
+
 interface Dimensions {
   width: number;
   height: number;

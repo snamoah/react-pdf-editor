@@ -8,6 +8,7 @@ import { save } from './utils/pdf';
 import { PdfPage } from './PdfPage';
 import { Image } from './Image';
 import { ggID } from './utils/helpers';
+import { DrawingModal } from './DrawingModal';
 
 
 interface State {
@@ -19,6 +20,7 @@ interface State {
     pagesScale: any[];
     pageDimensions: Dimensions[];
     saving: boolean;
+    drawing: boolean;
     uploading: boolean;
 }
 
@@ -33,6 +35,7 @@ class App extends React.Component {
     pagesScale: [],
     pageDimensions: [],
     saving: false,
+    drawing: false,
     uploading: false,
   }
 
@@ -211,6 +214,18 @@ class App extends React.Component {
     this.setState({ allObjects });
   }
 
+  openDrawingModal = () => {
+    this.setState({
+      drawing: true
+    });
+  }
+
+  closeDrawingModal = () => {
+    this.setState({
+      drawing: false
+    })
+  }
+
   render() {
     const { allObjects, pdfName, pdfFile, pages, saving, selectedPageIndex, pageDimensions } = this.state;
     const isMultiplePages = pages.length > 1;
@@ -236,7 +251,7 @@ class App extends React.Component {
                       <Dropdown.Item onClick={this.handleFileInput('image')}>
                         Add Image
                       </Dropdown.Item>
-                      <Dropdown.Item>Add Drawing</Dropdown.Item>
+                      <Dropdown.Item onClick={this.openDrawingModal}>Add Drawing</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                   <Menu.Item
@@ -298,6 +313,14 @@ class App extends React.Component {
               </Grid.Row>
           </Grid>
         )}
+
+        {
+          <DrawingModal 
+            open={this.state.drawing} 
+            dismiss={this.closeDrawingModal}
+            confirm={this.closeDrawingModal}
+          />
+        }
       </Container>
     );
 
