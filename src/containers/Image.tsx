@@ -12,7 +12,7 @@ interface Props {
     updateImageObject: (imageObject: Partial<ImageObject>) => void;
 }
 
-export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, updateImageObject }: ImageObject & Props) => {
+export const Image = ({ x, y, payload, width, height, pageWidth, removeImage, pageHeight, updateImageObject }: ImageObject & Props) => {
     const canvasRef = createRef<HTMLCanvasElement>();
     const [canvasWidth, setCanvasWidth] = useState(width);
     const [canvasHeight, setCanvasHeight] = useState(height);
@@ -157,15 +157,12 @@ export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, upd
         renderImage(payload);
     }, [payload, canvasWidth, canvasHeight]);
 
-    const handleClick = () => { 
-        console.log('====> this is a click oo', dimmerActive);
-        setDimmerActive(true) 
-    };
-
+    const handleClick = () =>  setDimmerActive(true);
     const onCancelDelete = () => setDimmerActive(false);
 
     const deleteImage = () => {
         onCancelDelete();
+        removeImage();
     }
 
     return (
