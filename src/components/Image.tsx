@@ -1,7 +1,8 @@
 import React, { useState, createRef, useEffect } from 'react';
+import { DragActions } from '../entities';
+import { getMovePosition } from '../utils/helpers';
 
 const IMAGE_MAX_SIZE = 300;
-const PADDING = 25;
 const ADJUSTERS_DIMENSIONS = 20;
 
 interface Props {
@@ -11,29 +12,6 @@ interface Props {
     updateImageObject: (imageObject: Partial<ImageObject>) => void;
 }
 
-const getImageMovePosition = (x: number, y: number, dragX: number, dragY: number, width: number, height: number, pageWidth: number, pageHeight: number) => {
-    const newPositionTop = y + dragY;
-    const newPositionLeft = x + dragX;
-    const newPositionRight = newPositionLeft + width;
-    const newPositionBottom = newPositionTop + height;
-
-    const top = newPositionTop < 0 
-            ? 0 
-            : newPositionBottom > pageHeight + PADDING
-            ? pageHeight - height + PADDING
-            : newPositionTop;
-    const left = newPositionLeft < 0 
-        ? 0 
-        : newPositionRight > pageWidth + PADDING
-        ? pageWidth - width + PADDING
-        : newPositionLeft
-
-    return {
-        top,
-        left,
-    }
-};
-
 export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, updateImageObject }: ImageObject & Props) => {
     const canvasRef = createRef<HTMLCanvasElement>();
     const [canvasWidth, setCanvasWidth] = useState(width);
@@ -42,39 +20,51 @@ export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, upd
     const [positionTop, setPositionTop] = useState(y);
     const [positionLeft, setPositionLeft] = useState(x);
     const [direction, setDirection] = useState<string[]>([]);
+    const [operation, setOperation] = useState<DragActions>(DragActions.NO_MOVEMENT);
 
     const renderImage = (img: HTMLImageElement) => {
-        const context = canvasRef.current && canvasRef.current.getContext('2d');
-        if (context) {
-            let newCanvasWidth = canvasWidth;
-            let newCanvasHeight = canvasHeight;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-            if (canvasWidth > IMAGE_MAX_SIZE) {
-                const newScale = IMAGE_MAX_SIZE / canvasWidth;
-                newCanvasWidth = canvasWidth * newScale;
-                setCanvasWidth(newCanvasWidth);
-            } 
+        const context = canvas.getContext('2d');
+        if (!context) return;
 
-            if (canvasHeight > IMAGE_MAX_SIZE) {
-                const newScale = IMAGE_MAX_SIZE / height;
-                newCanvasHeight = canvasHeight * newScale;
-                setCanvasHeight(newCanvasHeight);
-            }
+        let scale = 1;
+        if (canvasWidth > IMAGE_MAX_SIZE) {
+            scale = IMAGE_MAX_SIZE / canvasWidth;
+        } 
 
-            context.drawImage(payload, 0, 0, newCanvasWidth, newCanvasHeight);
-
-            canvasRef.current && canvasRef.current.toBlob(blob => {
-                updateImageObject({ file: blob as File, width: newCanvasWidth, height: newCanvasHeight });
-            });
+        if (canvasHeight > IMAGE_MAX_SIZE) {
+            scale = Math.min(scale, IMAGE_MAX_SIZE / canvasHeight);
         }
+
+        const newCanvasWidth = canvasWidth * scale;
+        const newCanvasHeight = canvasHeight * scale;
+
+        setCanvasWidth(newCanvasWidth);
+        setCanvasHeight(newCanvasHeight);
+
+        canvas.width = newCanvasWidth;
+        canvas.height = newCanvasHeight;
+
+        context.drawImage(payload, 0, 0, newCanvasWidth, newCanvasHeight);
+        canvas.toBlob(blob => {
+            updateImageObject({ 
+                file: blob as File, 
+                 width: newCanvasWidth,
+                 height: newCanvasHeight,
+            });
+        });
     }
 
     const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
         setMouseDown(true);
+        setOperation(DragActions.MOVE);
         const directions = event.currentTarget.dataset.direction;
         if (directions) {
             setDirection(directions.split('-'));
+            setOperation(DragActions.SCALE);
         }
     }
 
@@ -82,7 +72,7 @@ export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, upd
         event.preventDefault();
 
         if (mouseDown) {
-            const { top, left } = getImageMovePosition(
+            const { top, left } = getMovePosition(
                 positionLeft,
                 positionTop,
                 event.movementX,
@@ -102,25 +92,42 @@ export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, upd
         event.preventDefault();
         setMouseDown(false);
 
-        const { top, left } = getImageMovePosition(
-            positionLeft,
-            positionTop,
-            event.movementX,
-            event.movementY,
-            canvasWidth,
-            canvasHeight,
-            pageWidth,
-            pageHeight
-        );
-        updateImageObject({
-            x: left,
-            y: top,
-            width: canvasWidth,
-            height: canvasHeight,
-        });
+        if (operation === DragActions.MOVE) {
+            const { top, left } = getMovePosition(
+                positionLeft,
+                positionTop,
+                event.movementX,
+                event.movementY,
+                canvasWidth,
+                canvasHeight,
+                pageWidth,
+                pageHeight
+            );
+        
+            updateImageObject({
+                x: left,
+                y: top,
+            });
+        }
+
+        if (operation === DragActions.SCALE) {
+            updateImageObject({
+                x: positionLeft,
+                y: positionTop,
+            });
+
+        }
+
+        setOperation(DragActions.NO_MOVEMENT);
     }
 
-    const handleScale = (event: React.MouseEvent<HTMLDivElement>) => {
+    const handleMouseOut = (event: React.MouseEvent<HTMLDivElement>) => {
+        if (operation === DragActions.MOVE) {
+            handleMouseUp(event);
+        }
+    }
+
+    const handleImageScale = (event: React.MouseEvent<HTMLDivElement>) => {
         event.preventDefault();
 
         if (mouseDown) {
@@ -135,12 +142,10 @@ export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, upd
             }
 
             if (direction.includes('right')) {
-                setPositionLeft(positionLeft - event.movementX);
                 setCanvasWidth(canvasWidth + event.movementX);
             }
 
             if (direction.includes('bottom')) {
-                setPositionTop(positionTop - event.movementY);
                 setCanvasHeight(canvasHeight + event.movementY);
             }
         }
@@ -155,30 +160,32 @@ export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, upd
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            onMouseOut={handleMouseUp}
+            onMouseOut={handleMouseOut}
             style={{
                 position: "absolute",
                 top: positionTop,
                 left: positionLeft,
                 borderStyle: "dashed",
-                borderWidth: '1px',
+                borderWidth: 1,
                 borderColor:  'grey',
                 width: canvasWidth + 2,
-                height: canvasHeight +  2,
+                height: canvasHeight + 2,
                 cursor: 'move',
             }}
         >
             <div style={{ position: 'relative' }}>
                 <canvas 
                     ref={canvasRef}
-                    width={canvasWidth}
-                    height={canvasHeight}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                    }}
                 />
                 <div
                     data-direction="top-left"
                     onMouseDown={handleMouseDown}
                     onMouseUp={handleMouseUp}
-                    onMouseMove={handleScale}
+                    onMouseMove={handleImageScale}
                     style={{
                         position: 'absolute',
                         cursor: 'nwse-resize',
@@ -191,7 +198,7 @@ export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, upd
                     data-direction="top-right"
                     onMouseDown={handleMouseDown}
                     onMouseUp={handleMouseUp}
-                    onMouseMove={handleScale}
+                    onMouseMove={handleImageScale}
                     style={{
                         position: 'absolute',
                         top: 0,
@@ -204,12 +211,12 @@ export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, upd
                     data-direction="bottom-left"
                     onMouseDown={handleMouseDown}
                     onMouseUp={handleMouseUp}
-                    onMouseMove={handleScale} 
+                    onMouseMove={handleImageScale} 
                     style={{
                         position: 'absolute',
                         cursor: 'nesw-resize',
                         left: 0,
-                        bottom: Math.round(ADJUSTERS_DIMENSIONS / 2),
+                        bottom: ADJUSTERS_DIMENSIONS - 15,
                         width: ADJUSTERS_DIMENSIONS,
                         height: ADJUSTERS_DIMENSIONS,
                     }} />
@@ -217,11 +224,11 @@ export const Image = ({ x, y, payload, width, height, pageWidth, pageHeight, upd
                     data-direction="bottom-right"
                     onMouseDown={handleMouseDown}
                     onMouseUp={handleMouseUp}
-                    onMouseMove={handleScale} 
+                    onMouseMove={handleImageScale} 
                     style={{
                         position: 'absolute',
-                        bottom: Math.round(ADJUSTERS_DIMENSIONS / 2),
-                        right: 0,
+                        bottom: ADJUSTERS_DIMENSIONS - 15,
+                        right:  ADJUSTERS_DIMENSIONS - 15,
                         width: ADJUSTERS_DIMENSIONS,
                         height: ADJUSTERS_DIMENSIONS,
                         cursor: 'nwse-resize'

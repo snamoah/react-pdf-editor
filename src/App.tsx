@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { RefObject } from 'react';
 import 'semantic-ui-css/semantic.min.css'
 
 import { Menu, Container, Segment, Header, Icon, Button, Grid, Dropdown } from 'semantic-ui-react';
@@ -27,6 +27,8 @@ interface State {
 }
 
 class App extends React.Component {
+  pdfInput: RefObject<HTMLInputElement>;
+  imageInput: RefObject<HTMLInputElement>;
 
   state: State = {
     pdfFile: undefined,
@@ -40,6 +42,13 @@ class App extends React.Component {
     drawing: false,
     uploading: false,
     selectedDrawing: 0,
+  }
+
+  constructor() {
+    super({});
+
+    this.pdfInput = React.createRef<HTMLInputElement>();
+    this.imageInput = React.createRef<HTMLInputElement>();
   }
 
   onUploadPDF = async (e: React.ChangeEvent<HTMLInputElement>  & { dataTransfer?: DataTransfer }) => {
@@ -108,6 +117,7 @@ class App extends React.Component {
   renderHiddenInputs = () => (
     <>
       <input
+        ref={this.pdfInput}
         type="file"
         name="pdf"
         id="pdf"
@@ -117,6 +127,7 @@ class App extends React.Component {
         style={{ display: 'none' }} />
       { this.state.selectedPageIndex > -1 && (
           <input
+            ref={this.imageInput}
             type="file"
             id="image"
             name="image"
@@ -167,7 +178,15 @@ class App extends React.Component {
   }
 
   handleFileInput = (inputName: string) => () => {
-    document.getElementById(inputName)?.click();
+    const input = inputName === 'pdf' 
+    ? this.pdfInput.current
+    : inputName === 'image'
+    ? this.imageInput.current
+    : null;
+
+    if (input) {
+      input.click();
+    }
   }
 
   renderEmpty = () => (
@@ -261,7 +280,6 @@ class App extends React.Component {
     const allObjectsForCurrentPage = allObjects[selectedPageIndex];
     const currentPageDimensions = pageDimensions[selectedPageIndex];
   
-    console.log('====> allObjects for current page', allObjectsForCurrentPage)
     return (
       <Container style={{ margin: 30 }}>
         {this.renderHiddenInputs()}
@@ -332,6 +350,10 @@ class App extends React.Component {
                               return (
                                 <Drawing
                                   key={key}
+                                  removeDrawing={() => this.removeObject(index, selectedPageIndex)}
+                                  pageWidth={currentPageDimensions.width}
+                                  pageHeight={currentPageDimensions.height}
+                                  updateDrawingObject={(drawing) => this.updateObject(index, selectedPageIndex, drawing)}
                                   {...data as DrawingObject}
                                 />
                               )

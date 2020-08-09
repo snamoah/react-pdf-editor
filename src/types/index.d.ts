@@ -18,6 +18,8 @@ interface DrawingObject extends AttachmentBase {
 }
 
 interface Dimensions {
+  x: number;
+  y: number;
   width: number;
   height: number;
 }
