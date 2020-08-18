@@ -5,11 +5,11 @@ import { ConfirmContent } from './ConfirmContent';
 
 interface Props {
     path?: string;
-    width: number;
     stroke?: string;
+    width: number;
     height: number;
-    positionTop: number;
     strokeWidth?: number;
+    positionTop: number;
     positionLeft: number;
     dimmerActive: boolean;
     cancelDelete: () => void;

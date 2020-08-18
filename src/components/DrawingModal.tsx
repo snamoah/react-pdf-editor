@@ -5,7 +5,7 @@ import { Color } from '../entities';
 interface Props {
     open: boolean;
     dismiss: () => void;
-    confirm: (drawing?: { width: number, stroke: string, strokeWidth: number, height: number, path: string }) => void;
+    confirm: (drawing?: { width: number, height: number, path: string, strokeWidth: number, stroke: string }) => void;
     drawing?: DrawingObject;
 }
 
@@ -72,6 +72,8 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
         setMaxX(0);
         setMinY(Infinity);
         setMaxY(0);
+        setStrokeWidth(5);
+        setStroke(Color.BLACK);
     }
 
     const handleDone = () => {
@@ -161,6 +163,15 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
                                 </div>
                             </Dropdown.Menu>
                         </Dropdown>
+                        {/* <Dropdown item text={stroke}>
+                            <Dropdown.Menu>
+                                <Card.Group itemsPerRow={3}>
+                                    {Object.values(Color).map((color, index) => (
+                                        <Card inverted key={index} color={color} />
+                                    ))}
+                                </Card.Group>
+                            </Dropdown.Menu>
+                        </Dropdown> */}
                     </Menu.Menu>
                 </Menu>
                 <div
