@@ -1,5 +1,5 @@
 import React, { useState, createRef, useEffect } from 'react';
-import { Modal, Button, Menu, Dropdown } from "semantic-ui-react";
+import { Modal, Button, Menu, Dropdown, Label } from "semantic-ui-react";
 import { Color } from '../entities';
 
 interface Props {
@@ -22,6 +22,7 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
     const [mouseDown, setMouseDown] = useState(false);
     const [strokeWidth, setStrokeWidth] = useState(5);
     const [stroke, setStroke] = useState(Color.BLACK);
+    const [strokeDropdownOpen, setStrokeDropdownOpen] = useState(false)
 
     useEffect(() => {
         const svg = svgRef.current;
@@ -108,6 +109,11 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
     // TODO: Move to config
     const strokeSizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+    const handleStrokeSelect = (color: Color) => () => {
+        setStroke(color);
+        setStrokeDropdownOpen(false);
+    }
+
     return (
         <Modal 
             size="small"
@@ -117,8 +123,10 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
         >
             <Modal.Header>Add your Drawing</Modal.Header>
             <Modal.Content>
-                <Menu>
+                <Menu size='tiny'>
                     <Menu.Item header>Tools</Menu.Item>
+                    {/* <Menu.Item><Icon name="undo" /></Menu.Item>
+                    <Menu.Item><Icon name="redo" /></Menu.Item> */}
                     <Menu.Menu position="right">
                         <Dropdown item text={`${strokeWidth}`}>
                             <Dropdown.Menu>
@@ -131,6 +139,28 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
                                     {size}
                                 </Dropdown.Item>
                             )) }
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Dropdown
+                            item 
+                            trigger={(
+                              <Label color={stroke} /> 
+                            )}
+                            onClick={() => setStrokeDropdownOpen(true)} 
+                            onBlur={() => setStrokeDropdownOpen(false)}
+                        >
+                            <Dropdown.Menu open={strokeDropdownOpen}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: 5 }}>
+                                    {Object.values(Color).map((color, index) => (
+                                        <div style={{ margin: 2.5 }}>
+                                            <Label
+                                                key={index} 
+                                                color={color} 
+                                                onClick={handleStrokeSelect(color)} 
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </Dropdown.Menu>
                         </Dropdown>
                         {/* <Dropdown item text={stroke}>

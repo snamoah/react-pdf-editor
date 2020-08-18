@@ -1,6 +1,6 @@
 import { readAsArrayBuffer } from './asyncReader';
 import { fetchFont, getAsset } from './prepareAssets';
-import { noop } from './helpers';
+import { noop, normalize } from './helpers';
 
 export async function save(pdfFile: File, objects: any[], name: string) {
   const PDFLib = await getAsset('PDFLib');
@@ -20,7 +20,7 @@ export async function save(pdfFile: File, objects: any[], name: string) {
     // 'y' starts from bottom in PDFLib, use this to calculate y
     const pageHeight = page.getHeight();
     const pageWidth = page.getWidth();
-    const embedProcesses = pageObjects.map(async (object: { type?: any; file?: any; x?: any; y?: any; width?: any; height?: any; lines?: any; lineHeight?: any; size?: any; fontFamily?: any; path?: any; scale?: any; strokeWidth?: number }) => {
+    const embedProcesses = pageObjects.map(async (object: { type?: any; file?: any; x?: any; y?: any; width?: any; height?: any; lines?: any; lineHeight?: any; size?: any; fontFamily?: any; path?: any; scale?: any; stroke?: string, strokeWidth?: number }) => {
       if (object.type === 'image') {
         let { file, x, y, width, height } = object;
         let img: any;
@@ -63,7 +63,7 @@ export async function save(pdfFile: File, objects: any[], name: string) {
             y: -y,
           });
       } else if (object.type === 'drawing') {
-        let { x, y, path, scale, strokeWidth } = object;
+        let { x, y, path, scale, stroke, strokeWidth } = object;
         const {
           pushGraphicsState,
           setLineCap,
@@ -71,6 +71,7 @@ export async function save(pdfFile: File, objects: any[], name: string) {
           setLineJoin,
           LineCapStyle,
           LineJoinStyle,
+          rgb,
         } = PDFLib;
         return () => {
           page.pushOperators(
@@ -78,7 +79,15 @@ export async function save(pdfFile: File, objects: any[], name: string) {
             setLineCap(LineCapStyle.Round),
             setLineJoin(LineJoinStyle.Round)
           );
+          
+          const color = window.w3color(stroke!).toRgb();
+
           page.drawSvgPath(path, {
+            borderColor: rgb(
+              normalize(color.r), 
+              normalize(color.g), 
+              normalize(color.b),
+            ),
             borderWidth: strokeWidth,
             scale,
             x,

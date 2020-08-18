@@ -5,16 +5,16 @@ export enum DragActions {
 }
 
 export enum Color {
-  RED = 'red', 
-  ORANGE ='orange', 
-  YELLOW = 'yellow', 
-  OLIVE = 'olive', 
-  GREEN = 'green', 
-  TEAL = 'teal', 
-  BLUE = 'blue', 
-  VIOLET = 'violet', 
+  RED = 'red',
+  ORANGE = 'orange',
+  YELLOW = 'yellow',
+  OLIVE = 'olive',
+  GREEN = 'green',
+  TEAL = 'teal',
+  BLUE = 'blue',
+  VIOLOET = 'violet',
   PURPLE = 'purple',
-  BROWN = 'brown', 
-  GREY = 'grey', 
-  BLACK = 'black'
+  BROWN = 'brown',
+  GREY = 'grey',
+  BLACK = 'black',
 }
