@@ -1,3 +1,11 @@
+interface W3Color {
+  toRgb: () => { r: number, b: number, g: number, a: number }
+}
+
+declare interface Window {
+    w3color: (color: object | string, element?: HTMLElement) => W3Color;
+}
+
 type AttachmentType = 'image' | 'text' | 'drawing';
 
 interface AttachmentBase {
@@ -15,6 +23,8 @@ interface ImageObject extends AttachmentBase {
 
 interface DrawingObject extends AttachmentBase {
   path?: string;
+  stroke?: string;
+  strokeWidth?: number;
 }
 
 interface TextObject extends AttachmentBase {

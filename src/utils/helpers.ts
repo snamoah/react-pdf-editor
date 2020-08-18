@@ -36,3 +36,5 @@ export const getMovePosition = (x: number, y: number, dragX: number, dragY: numb
       left,
   }
 };
+
+export const normalize = (value: number) => parseFloat((value / 255).toFixed(1))
