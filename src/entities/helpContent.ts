@@ -37,5 +37,11 @@ export const helpContent = [
             `Yes you can. Move your mouse to the top-left corner of the image.`,
             `The cursor should change and you should be able to resize from there`
         ]
+    },
+    {
+        title: 'Can I load multi-page pdf?',
+        content: [
+            'Yes.'
+        ]
     }
 ]

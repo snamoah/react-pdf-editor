@@ -1,10 +1,11 @@
 import React, { useState, createRef, useEffect } from 'react';
-import { Modal, Button } from "semantic-ui-react";
+import { Modal, Button, Menu, Dropdown } from "semantic-ui-react";
+import { Color } from '../entities';
 
 interface Props {
     open: boolean;
     dismiss: () => void;
-    confirm: (drawing?: { width: number, height: number, path: string }) => void;
+    confirm: (drawing?: { width: number, height: number, path: string, strokeWidth: number, stroke: string }) => void;
     drawing?: DrawingObject;
 }
 
@@ -19,6 +20,8 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
     const [minY, setMinY] = useState(Infinity);
     const[ maxY, setMaxY] = useState(0);
     const [mouseDown, setMouseDown] = useState(false);
+    const [strokeWidth, setStrokeWidth] = useState(5);
+    const [stroke, setStroke] = useState(Color.BLACK);
 
     useEffect(() => {
         const svg = svgRef.current;
@@ -68,6 +71,8 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
         setMaxX(0);
         setMinY(Infinity);
         setMaxY(0);
+        setStrokeWidth(5);
+        setStroke(Color.BLACK);
     }
 
     const handleDone = () => {
@@ -83,6 +88,8 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
         const dy = -(minY - 10);
 
         confirm({
+            stroke,
+            strokeWidth,
             width: boundingWidth + 20,
             height: boundingHeight + 20,
             path: paths.reduce((fullPath, lineItem) => 
@@ -98,6 +105,9 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
         dismiss();
     }
 
+    // TODO: Move to config
+    const strokeSizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
     return (
         <Modal 
             size="small"
@@ -107,6 +117,33 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
         >
             <Modal.Header>Add your Drawing</Modal.Header>
             <Modal.Content>
+                <Menu>
+                    <Menu.Item header>Tools</Menu.Item>
+                    <Menu.Menu position="right">
+                        <Dropdown item text={`${strokeWidth}`}>
+                            <Dropdown.Menu>
+                            {strokeSizes.map(size => (
+                                <Dropdown.Item 
+                                    key={size} 
+                                    selected={size === strokeWidth}
+                                    onClick={() => setStrokeWidth(size)}
+                                >
+                                    {size}
+                                </Dropdown.Item>
+                            )) }
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        {/* <Dropdown item text={stroke}>
+                            <Dropdown.Menu>
+                                <Card.Group itemsPerRow={3}>
+                                    {Object.values(Color).map((color, index) => (
+                                        <Card inverted key={index} color={color} />
+                                    ))}
+                                </Card.Group>
+                            </Dropdown.Menu>
+                        </Dropdown> */}
+                    </Menu.Menu>
+                </Menu>
                 <div
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
@@ -119,10 +156,10 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
                             height: '50vh',
                         }}>
                         <path
-                            strokeWidth="5"
+                            strokeWidth={strokeWidth}
                             strokeLinejoin="round"
                             strokeLinecap="round"
-                            stroke="black"
+                            stroke={stroke}
                             fill="none"
                             d={path}
                         />

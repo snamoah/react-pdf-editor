@@ -10,7 +10,7 @@ interface Props {
     updateDrawingObject: (drawingObject: Partial<DrawingObject>) => void;
 }
 
-export const Drawing = ({ x, y, width, height, path, pageWidth, pageHeight, removeDrawing, updateDrawingObject }: DrawingObject & Props) => {
+export const Drawing = ({ x, y, width, strokeWidth, stroke, height, path, pageWidth, pageHeight, removeDrawing, updateDrawingObject }: DrawingObject & Props) => {
     const svgRef = createRef<SVGSVGElement>();
     const [mouseDown, setMouseDown] = useState(false);
     const [positionTop, setPositionTop] = useState(y);
@@ -98,6 +98,8 @@ export const Drawing = ({ x, y, width, height, path, pageWidth, pageHeight, remo
     }
     return (
         <DrawingComponent 
+            stroke={stroke}
+            strokeWidth={strokeWidth}
             path={path}
             width={width}
             svgRef={svgRef}

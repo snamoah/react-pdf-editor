@@ -15,6 +15,8 @@ interface ImageObject extends AttachmentBase {
 
 interface DrawingObject extends AttachmentBase {
   path?: string;
+  strokeWidth?: number;
+  stroke?: string;
 }
 
 interface Dimensions {
