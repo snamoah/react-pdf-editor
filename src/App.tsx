@@ -275,6 +275,26 @@ class App extends React.Component {
     })
   }
 
+  addText = () => {
+    const { allObjects, selectedPageIndex } = this.state;
+
+    const newObject: TextObject = {
+      id: ggID(),
+      type: 'text',
+      x: 0,
+      y: 0,
+      width: 100,
+      height: 25,
+      text: 'Enter Text Here',
+    };
+
+    this.setState({
+      allObjects: allObjects.map((objects, index) =>
+        selectedPageIndex === index ? [...objects, newObject] : objects
+      )
+    })    
+  }
+
   render() {
     const { allObjects, pdfName, pdfFile, pages, saving, selectedPageIndex, pageDimensions } = this.state;
     const isMultiplePages = pages.length > 1;
@@ -297,10 +317,20 @@ class App extends React.Component {
                     icon="edit outline" 
                     simple>
                     <Dropdown.Menu>
-                      <Dropdown.Item onClick={this.handleFileInput('image')}>
+                    <Dropdown.Item
+                        onClick={this.addText}>
+                          Add Text
+                      </Dropdown.Item>
+                      <Dropdown.Item 
+                        onClick={this.handleFileInput('image')}
+                      >
                         Add Image
                       </Dropdown.Item>
-                      <Dropdown.Item onClick={this.openDrawingModal}>Add Drawing</Dropdown.Item>
+                      <Dropdown.Item 
+                        onClick={this.openDrawingModal}
+                      >
+                        Add Drawing
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                   <Menu.Item
