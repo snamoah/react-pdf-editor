@@ -20,7 +20,7 @@ export async function save(pdfFile: File, objects: any[], name: string) {
     // 'y' starts from bottom in PDFLib, use this to calculate y
     const pageHeight = page.getHeight();
     const pageWidth = page.getWidth();
-    const embedProcesses = pageObjects.map(async (object: { type?: any; file?: any; x?: any; y?: any; width?: any; height?: any; lines?: any; lineHeight?: any; size?: any; fontFamily?: any; path?: any; scale?: any; }) => {
+    const embedProcesses = pageObjects.map(async (object: { type?: any; file?: any; x?: any; y?: any; width?: any; height?: any; lines?: any; lineHeight?: any; size?: any; fontFamily?: any; path?: any; scale?: any; strokeWidth?: number }) => {
       if (object.type === 'image') {
         let { file, x, y, width, height } = object;
         let img: any;
@@ -63,7 +63,7 @@ export async function save(pdfFile: File, objects: any[], name: string) {
             y: -y,
           });
       } else if (object.type === 'drawing') {
-        let { x, y, path, scale } = object;
+        let { x, y, path, scale, strokeWidth } = object;
         const {
           pushGraphicsState,
           setLineCap,
@@ -79,7 +79,7 @@ export async function save(pdfFile: File, objects: any[], name: string) {
             setLineJoin(LineJoinStyle.Round)
           );
           page.drawSvgPath(path, {
-            borderWidth: 5,
+            borderWidth: strokeWidth,
             scale,
             x,
             y: pageHeight - y,
