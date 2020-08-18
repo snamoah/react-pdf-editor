@@ -6,8 +6,10 @@ import { ConfirmContent } from './ConfirmContent';
 interface Props {
     path?: string;
     width: number;
+    stroke?: string;
     height: number;
     positionTop: number;
+    strokeWidth?: number;
     positionLeft: number;
     dimmerActive: boolean;
     cancelDelete: () => void;
@@ -29,6 +31,8 @@ export const Drawing: React.FC<Props> = ({
     height,
     svgRef,
     path,
+    stroke,
+    strokeWidth,
     handleMouseDown,
     handleMouseMove,
     handleMouseOut,
@@ -57,10 +61,10 @@ export const Drawing: React.FC<Props> = ({
                     ref={svgRef}
                 >
                         <path
-                            strokeWidth="5"
+                            strokeWidth={strokeWidth}
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            stroke="black"
+                            stroke={stroke}
                             fill="none"
                             d={path}
                         />

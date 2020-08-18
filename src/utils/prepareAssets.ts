@@ -1,4 +1,4 @@
-type ScriptName = 'pdfjsLib' | 'PDFLib' | 'download' | 'makeTextPDF';
+type ScriptName = 'pdfjsLib' | 'PDFLib' | 'download' | 'makeTextPDF' | 'w3Color';
 
 interface Script {
     name: ScriptName;
@@ -19,6 +19,7 @@ const scripts: Script[] = [
       src: 'https://unpkg.com/downloadjs@1.4.7',
     },
     { name: 'makeTextPDF', src: 'https://cdn.jsdelivr.net/gh/snamoah/react-pdf-editor/public/makeTextPDF.js' },
+    { name: 'w3Color', src: 'https://www.w3schools.com/lib/w3color.js' }
 ];
   
 const assets: { [key: string]: any } = {};

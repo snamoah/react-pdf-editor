@@ -1,10 +1,11 @@
 import React, { useState, createRef, useEffect } from 'react';
-import { Modal, Button } from "semantic-ui-react";
+import { Modal, Button, Menu, Dropdown, Label } from "semantic-ui-react";
+import { Color } from '../entities';
 
 interface Props {
     open: boolean;
     dismiss: () => void;
-    confirm: (drawing?: { width: number, height: number, path: string }) => void;
+    confirm: (drawing?: { width: number, stroke: string, strokeWidth: number, height: number, path: string }) => void;
     drawing?: DrawingObject;
 }
 
@@ -19,6 +20,9 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
     const [minY, setMinY] = useState(Infinity);
     const[ maxY, setMaxY] = useState(0);
     const [mouseDown, setMouseDown] = useState(false);
+    const [strokeWidth, setStrokeWidth] = useState(5);
+    const [stroke, setStroke] = useState(Color.BLACK);
+    const [strokeDropdownOpen, setStrokeDropdownOpen] = useState(false)
 
     useEffect(() => {
         const svg = svgRef.current;
@@ -83,6 +87,8 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
         const dy = -(minY - 10);
 
         confirm({
+            stroke,
+            strokeWidth,
             width: boundingWidth + 20,
             height: boundingHeight + 20,
             path: paths.reduce((fullPath, lineItem) => 
@@ -98,6 +104,14 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
         dismiss();
     }
 
+    // TODO: Move to config
+    const strokeSizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+    const handleStrokeSelect = (color: Color) => () => {
+        setStroke(color);
+        setStrokeDropdownOpen(false);
+    }
+
     return (
         <Modal 
             size="small"
@@ -107,6 +121,48 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
         >
             <Modal.Header>Add your Drawing</Modal.Header>
             <Modal.Content>
+                <Menu size='tiny'>
+                    <Menu.Item header>Tools</Menu.Item>
+                    {/* <Menu.Item><Icon name="undo" /></Menu.Item>
+                    <Menu.Item><Icon name="redo" /></Menu.Item> */}
+                    <Menu.Menu position="right">
+                        <Dropdown item text={`${strokeWidth}`}>
+                            <Dropdown.Menu>
+                            {strokeSizes.map(size => (
+                                <Dropdown.Item 
+                                    key={size} 
+                                    selected={size === strokeWidth}
+                                    onClick={() => setStrokeWidth(size)}
+                                >
+                                    {size}
+                                </Dropdown.Item>
+                            )) }
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Dropdown
+                            item 
+                            trigger={(
+                              <Label color={stroke} /> 
+                            )}
+                            onClick={() => setStrokeDropdownOpen(true)} 
+                            onBlur={() => setStrokeDropdownOpen(false)}
+                        >
+                            <Dropdown.Menu open={strokeDropdownOpen}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', padding: 5 }}>
+                                    {Object.values(Color).map((color, index) => (
+                                        <div style={{ margin: 2.5 }}>
+                                            <Label
+                                                key={index} 
+                                                color={color} 
+                                                onClick={handleStrokeSelect(color)} 
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </Menu.Menu>
+                </Menu>
                 <div
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
@@ -119,10 +175,10 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
                             height: '50vh',
                         }}>
                         <path
-                            strokeWidth="5"
+                            strokeWidth={strokeWidth}
                             strokeLinejoin="round"
                             strokeLinecap="round"
-                            stroke="black"
+                            stroke={stroke}
                             fill="none"
                             d={path}
                         />
