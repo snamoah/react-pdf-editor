@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7ac646f4a68998e87efaba9ace61ec88",
+    "revision": "64b0e26c3cd0be742ab9f7bfca75a713",
     "url": "/react-pdf-editor/index.html"
   },
   {
-    "revision": "f8c5725b631eb5fe2792",
+    "revision": "cd3bc2ef6305aa9f7d22",
     "url": "/react-pdf-editor/static/css/2.825bb5ce.chunk.css"
   },
   {
-    "revision": "43c7a45b1ac3cdf43cf6",
+    "revision": "8fa7e51ac160fa1b264f",
     "url": "/react-pdf-editor/static/css/main.9559e866.chunk.css"
   },
   {
-    "revision": "f8c5725b631eb5fe2792",
-    "url": "/react-pdf-editor/static/js/2.6a23563f.chunk.js"
+    "revision": "cd3bc2ef6305aa9f7d22",
+    "url": "/react-pdf-editor/static/js/2.4cb1fa8e.chunk.js"
   },
   {
     "revision": "5bd09eb7f2cf4d145d532d862be18942",
-    "url": "/react-pdf-editor/static/js/2.6a23563f.chunk.js.LICENSE.txt"
+    "url": "/react-pdf-editor/static/js/2.4cb1fa8e.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "43c7a45b1ac3cdf43cf6",
-    "url": "/react-pdf-editor/static/js/main.f7964ba6.chunk.js"
+    "revision": "8fa7e51ac160fa1b264f",
+    "url": "/react-pdf-editor/static/js/main.aff710f8.chunk.js"
   },
   {
     "revision": "20eca66ab685b8ddecd0",
