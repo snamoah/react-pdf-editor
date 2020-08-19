@@ -23,8 +23,17 @@ interface ImageObject extends AttachmentBase {
 
 interface DrawingObject extends AttachmentBase {
   path?: string;
+  scale?: number;
   stroke?: string;
   strokeWidth?: number;
+}
+
+interface TextObject extends AttachmentBase {
+  text?: string,
+  fontFamily?: string;
+  size?: number;
+  lineHeight?: number;
+  lines?: string[];
 }
 
 interface Dimensions {
@@ -34,7 +43,7 @@ interface Dimensions {
   height: number;
 }
 
-type Attachment = ImageObject | DrawingObject;
+type Attachment = ImageObject | DrawingObject | TextObject;
 
 type AllObjects = Attachment[]
 
