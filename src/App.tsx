@@ -8,9 +8,10 @@ import { save } from './utils/pdf';
 import { PdfPage } from './components/PdfPage';
 import { Image } from './containers/Image';
 import { ggID } from './utils/helpers';
-import { DrawingModal } from './components/DrawingModal';
+import { Text } from './containers/Text';
 import { Drawing } from './containers/Drawing';
 import { HelpModal } from './components/HelpModal';
+import { DrawingModal } from './components/DrawingModal';
 
 
 interface State {
@@ -266,6 +267,7 @@ class App extends React.Component {
       ...drawing,
       x: 0,
       y: 0,
+      scale: 1,
     }
 
     this.setState({
@@ -273,6 +275,29 @@ class App extends React.Component {
         pageIndex === index ? [...objects, newObject] : objects
       )
     })
+  }
+
+  addText = () => {
+    const { allObjects, selectedPageIndex } = this.state;
+
+    const newObject: TextObject = {
+      id: ggID(),
+      type: 'text',
+      x: 0,
+      y: 0,
+      width: 120,
+      height: 25,
+      size: 16,
+      lineHeight: 1.4,
+      fontFamily: 'Times-Roman',
+      text: 'Enter Text Here',
+    };
+
+    this.setState({
+      allObjects: allObjects.map((objects, index) =>
+        selectedPageIndex === index ? [...objects, newObject] : objects
+      )
+    })    
   }
 
   render() {
@@ -297,10 +322,20 @@ class App extends React.Component {
                     icon="edit outline" 
                     simple>
                     <Dropdown.Menu>
-                      <Dropdown.Item onClick={this.handleFileInput('image')}>
+                    <Dropdown.Item
+                        onClick={this.addText}>
+                          Add Text
+                      </Dropdown.Item>
+                      <Dropdown.Item 
+                        onClick={this.handleFileInput('image')}
+                      >
                         Add Image
                       </Dropdown.Item>
-                      <Dropdown.Item onClick={this.openDrawingModal}>Add Drawing</Dropdown.Item>
+                      <Dropdown.Item 
+                        onClick={this.openDrawingModal}
+                      >
+                        Add Drawing
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                   <Menu.Item
@@ -363,6 +398,18 @@ class App extends React.Component {
                                   pageHeight={currentPageDimensions.height}
                                   updateDrawingObject={(drawing) => this.updateObject(index, selectedPageIndex, drawing)}
                                   {...data as DrawingObject}
+                                />
+                              )
+                            }
+
+                            if (data.type === 'text') {
+                              return (
+                                <Text
+                                  key={key}
+                                  pageWidth={currentPageDimensions.width}
+                                  pageHeight={currentPageDimensions.height}
+                                  updateTextObject={(textObject) => this.updateObject(index, selectedPageIndex, textObject)}
+                                  {...data as TextObject}
                                 />
                               )
                             }

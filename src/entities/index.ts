@@ -18,3 +18,14 @@ export enum Color {
   GREY = 'grey',
   BLACK = 'black',
 }
+
+export enum Attachment {
+    IMAGE = 'image',
+    DRAWING  = 'drawing',
+    TEXT = 'text',
+}
+
+export enum TextMode {
+    INSERT = 'insert',
+    COMMAND = 'command'
+}
