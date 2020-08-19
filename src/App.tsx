@@ -8,9 +8,10 @@ import { save } from './utils/pdf';
 import { PdfPage } from './components/PdfPage';
 import { Image } from './containers/Image';
 import { ggID } from './utils/helpers';
-import { DrawingModal } from './components/DrawingModal';
+import { Text } from './containers/Text';
 import { Drawing } from './containers/Drawing';
 import { HelpModal } from './components/HelpModal';
+import { DrawingModal } from './components/DrawingModal';
 
 
 interface State {
@@ -266,6 +267,7 @@ class App extends React.Component {
       ...drawing,
       x: 0,
       y: 0,
+      scale: 1,
     }
 
     this.setState({
@@ -283,8 +285,11 @@ class App extends React.Component {
       type: 'text',
       x: 0,
       y: 0,
-      width: 100,
+      width: 120,
       height: 25,
+      size: 16,
+      lineHeight: 1.4,
+      fontFamily: 'Times-Roman',
       text: 'Enter Text Here',
     };
 
@@ -393,6 +398,18 @@ class App extends React.Component {
                                   pageHeight={currentPageDimensions.height}
                                   updateDrawingObject={(drawing) => this.updateObject(index, selectedPageIndex, drawing)}
                                   {...data as DrawingObject}
+                                />
+                              )
+                            }
+
+                            if (data.type === 'text') {
+                              return (
+                                <Text
+                                  key={key}
+                                  pageWidth={currentPageDimensions.width}
+                                  pageHeight={currentPageDimensions.height}
+                                  updateTextObject={(textObject) => this.updateObject(index, selectedPageIndex, textObject)}
+                                  {...data as TextObject}
                                 />
                               )
                             }
