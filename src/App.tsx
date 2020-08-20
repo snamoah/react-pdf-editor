@@ -29,7 +29,7 @@ interface State {
     helpModalOpen: boolean;
 }
 
-class App extends React.Component {
+class App extends React.PureComponent {
   pdfInput: RefObject<HTMLInputElement>;
   imageInput: RefObject<HTMLInputElement>;
 
@@ -48,8 +48,8 @@ class App extends React.Component {
     helpModalOpen: false,
   }
 
-  constructor() {
-    super({});
+  constructor(props: any) {
+    super(props);
 
     this.pdfInput = React.createRef<HTMLInputElement>();
     this.imageInput = React.createRef<HTMLInputElement>();
@@ -215,7 +215,7 @@ class App extends React.Component {
     }))
   }
 
-  updateObject = (id: number, pageIndex: number, payload: Partial<ImageObject>) => {
+  updateObject = (id: number, pageIndex: number, payload: Partial<Attachment>) => {
     const { allObjects } = this.state;
     let pageObjects = allObjects[pageIndex];
     const objectToUpdate = pageObjects[id];
