@@ -1,9 +1,12 @@
 interface W3Color {
-  toRgb: () => { r: number, b: number, g: number, a: number }
+  toRgb: () => { r: number; b: number; g: number; a: number };
 }
 
 declare interface Window {
-    w3color: (color: object | string, element?: HTMLElement) => W3Color;
+  w3color: (
+    color: Record<string, unknown> | string,
+    element?: HTMLElement
+  ) => W3Color;
 }
 
 type AttachmentType = 'image' | 'text' | 'drawing';
@@ -29,7 +32,7 @@ interface DrawingObject extends AttachmentBase {
 }
 
 interface TextObject extends AttachmentBase {
-  text?: string,
+  text?: string;
   fontFamily?: string;
   size?: number;
   lineHeight?: number;
@@ -45,6 +48,6 @@ interface Dimensions {
 
 type Attachment = ImageObject | DrawingObject | TextObject;
 
-type AllObjects = Attachment[]
+type AllObjects = Attachment[];
 
 type DragEventListener<T> = (e: React.MouseEvent<T>) => void;

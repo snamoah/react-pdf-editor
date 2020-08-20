@@ -1,40 +1,50 @@
-
 const PADDING = 25;
 
-export function ggID() {
-    let id = 0;
-    return function genId() {
-      return id++;
-    };
+interface Position {
+  top: number;
+  left: number;
 }
 
-export function timeout(ms: number) {
-    return new Promise((res) => setTimeout(res, ms));
+export function ggID(): () => number {
+  let id = 0;
+  return function genId() {
+    return id++;
+  };
 }
 
-export const noop = () => {};
-
-export const getMovePosition = (x: number, y: number, dragX: number, dragY: number, width: number, height: number, pageWidth: number, pageHeight: number) => {
+export const getMovePosition = (
+  x: number,
+  y: number,
+  dragX: number,
+  dragY: number,
+  width: number,
+  height: number,
+  pageWidth: number,
+  pageHeight: number
+): Position => {
   const newPositionTop = y + dragY;
   const newPositionLeft = x + dragX;
   const newPositionRight = newPositionLeft + width;
   const newPositionBottom = newPositionTop + height;
 
-  const top = newPositionTop < 0 
-          ? 0 
-          : newPositionBottom > pageHeight + PADDING
-          ? pageHeight - height + PADDING
-          : newPositionTop;
-  const left = newPositionLeft < 0 
-      ? 0 
+  const top =
+    newPositionTop < 0
+      ? 0
+      : newPositionBottom > pageHeight + PADDING
+      ? pageHeight - height + PADDING
+      : newPositionTop;
+  const left =
+    newPositionLeft < 0
+      ? 0
       : newPositionRight > pageWidth + PADDING
       ? pageWidth - width + PADDING
-      : newPositionLeft
+      : newPositionLeft;
 
   return {
-      top,
-      left,
-  }
+    top,
+    left,
+  };
 };
 
-export const normalize = (value: number) => parseFloat((value / 255).toFixed(1))
+export const normalize = (value: number): number =>
+  parseFloat((value / 255).toFixed(1));

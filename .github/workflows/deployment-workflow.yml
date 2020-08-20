@@ -1,0 +1,20 @@
+name: Deploy
+on: 
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - name: Install dependencies
+        run: yarn
+      - name: Run deploy script
+        run: yarn deploy
+
+
