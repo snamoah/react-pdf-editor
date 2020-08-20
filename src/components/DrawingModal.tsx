@@ -159,9 +159,11 @@ export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {
                   }}
                 >
                   {Object.values(Color).map((color, index) => (
-                    <div style={{ margin: 2.5 }}>
+                    <div 
+                      style={{ margin: 2.5 }} 
+                      key={index}
+                    >
                       <Label
-                        key={index}
                         color={color}
                         onClick={handleStrokeSelect(color)}
                       />
