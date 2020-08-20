@@ -8,6 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Setup SSH
+        run:  |
+          touch ~/.ssh/id_rsa
+          echo ${{ secrets.SSH_KEY }} > ~/.ssh/rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
       - name: Setup Github Configuration
         run: |
           git config --global user.email ${{ secrets.EMAIL }}
