@@ -8,25 +8,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup SSH
-        run:  |
-          mkdir -p ~/.ssh
-          touch ~/.ssh/id_rsa
-          echo ${{ secrets.SSH_KEY }} > ~/.ssh/rsa
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
+      - name: Install SSH Client
+        uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_HEY }}
       - name: Setup Github Configuration
         run: |
           git config --global user.email ${{ secrets.EMAIL }}
           git config --global user.name ${{ secrets.NAME }}
-
       - name: Install Node
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
       - name: Install dependencies
         run: yarn
-      - name: Run deploy script
-        run: yarn deploy
+      - name: 'Build app'
+        run: yarn build
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3.5.9
+        with:
+          SSH: true
+          BRANCH: gh-pages
+          FOLDER: build
 
 
