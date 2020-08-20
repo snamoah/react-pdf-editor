@@ -10,6 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Setup SSH
         run:  |
+          mkdir -p ~/.ssh
           touch ~/.ssh/id_rsa
           echo ${{ secrets.SSH_KEY }} > ~/.ssh/rsa
           eval "$(ssh-agent -s)"
