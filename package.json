@@ -33,6 +33,7 @@
   },
   "lint-staged": {
     "*.{ts, tsx, json, md}": [
+      "yarn lint",
       "prettier --write"
     ]
   },
