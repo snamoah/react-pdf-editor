@@ -1,6 +1,6 @@
 {
   "name": "pdf-editor",
-  "version": "0.1.1-hotfix-4",
+  "version": "0.1.1-hotfix-5",
   "private": true,
   "homepage": "https://snamoah.github.io/react-pdf-editor",
   "dependencies": {
