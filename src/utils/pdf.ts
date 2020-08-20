@@ -6,7 +6,7 @@ export async function save(pdfFile: File, objects: any[], name: string) {
   const PDFLib = await getAsset('PDFLib');
   const download = await getAsset('download');
   const makeTextPDF = await getAsset('makeTextPDF');
-  let pdfDoc: { getPages: () => any[]; embedJpg: (arg0: unknown) => any; embedPng: (arg0: unknown) => any; embedPdf: (arg0: any) => [any] | PromiseLike<[any]>; save: () => any; };
+  let pdfDoc: { getPages: () => any[]; embedFont: (arg0: unknown) => any; embedJpg: (arg0: unknown) => any; embedPng: (arg0: unknown) => any; embedPdf: (arg0: any) => [any] | PromiseLike<[any]>; save: () => any; };
 
   try {
     pdfDoc = await PDFLib.PDFDocument.load(await readAsArrayBuffer(pdfFile));
@@ -20,9 +20,9 @@ export async function save(pdfFile: File, objects: any[], name: string) {
     // 'y' starts from bottom in PDFLib, use this to calculate y
     const pageHeight = page.getHeight();
     const pageWidth = page.getWidth();
-    const embedProcesses = pageObjects.map(async (object: { type?: any; file?: any; x?: any; y?: any; width?: any; height?: any; lines?: any; lineHeight?: any; size?: any; fontFamily?: any; path?: any; scale?: any; stroke?: string, strokeWidth?: number }) => {
+    const embedProcesses = pageObjects.map(async (object: Attachment) => {
       if (object.type === 'image') {
-        let { file, x, y, width, height } = object;
+        let { file, x, y, width, height } = (object as ImageObject);
         let img: any;
         try {
           if (file.type === 'image/jpeg') {
@@ -42,28 +42,19 @@ export async function save(pdfFile: File, objects: any[], name: string) {
           return noop;
         }
       } else if (object.type === 'text') {
-        let { x, y, lines, lineHeight, size, fontFamily } = object;
-        const font = await fetchFont(fontFamily);
-        const [textPage] = await pdfDoc.embedPdf(
-          await makeTextPDF({
-            lines,
-            fontSize: size,
-            lineHeight,
-            width: pageWidth,
-            height: pageHeight,
-            font: font?.buffer || fontFamily, // built-in font family
-            dy: font && font.correction && font.correction(size as number, lineHeight as number),
-          })
-        );
+        let { x, y, text, lineHeight, size, fontFamily, width } = (object as TextObject);
+        const pdfFont = await pdfDoc.embedFont(fontFamily);
         return () =>
-          page.drawPage(textPage, {
-            width: pageWidth,
-            height: pageHeight,
+          page.drawText(text, {
+            maxWidth: width,
+            font: pdfFont,
+            size,
+            lineHeight,
             x,
-            y: -y,
+            y: pageHeight - size! - y,
           });
       } else if (object.type === 'drawing') {
-        let { x, y, path, scale, stroke, strokeWidth } = object;
+        let { x, y, path, scale, stroke, strokeWidth } = (object as DrawingObject);
         const {
           pushGraphicsState,
           setLineCap,

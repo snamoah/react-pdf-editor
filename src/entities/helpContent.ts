@@ -43,5 +43,22 @@ export const helpContent = [
         content: [
             'Yes.'
         ]
-    }
+    },
+    {
+        title: 'How do I add text to the pdf?',
+        content: [
+            '-  In the dropdown menu for edit, select add Text. This will add a text object to your pdf',
+            '-  You should see a textbox with placeholder text `Enter Text Here`',
+            '-  The textbox has two modes, edit mode and command mode, you can toggle between either by double clicking any area within the textbox.',
+            '-  In Edit Mode, you can enter your desired text',
+            `-  In Command Mode, you can move the textbox around to change it's position`,
+        ]
+    },
+    {
+        title: `Why can't I enter multi-line text?`,
+        content: [
+            'The textfield feature is in beta. There are more functionalities to be added like resizing, selecting fonts, changing font size etc which are in development.',
+            'These functionalities should be available in the next release',
+        ]
+    },
 ]
