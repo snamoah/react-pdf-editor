@@ -1,5 +1,10 @@
 const PADDING = 25;
 
+interface Position {
+  top: number;
+  left: number;
+}
+
 export function ggID(): () => number {
   let id = 0;
   return function genId() {
@@ -16,7 +21,7 @@ export const getMovePosition = (
   height: number,
   pageWidth: number,
   pageHeight: number
-) => {
+): Position => {
   const newPositionTop = y + dragY;
   const newPositionLeft = x + dragX;
   const newPositionRight = newPositionLeft + width;
@@ -41,5 +46,5 @@ export const getMovePosition = (
   };
 };
 
-export const normalize = (value: number) =>
+export const normalize = (value: number): number =>
   parseFloat((value / 255).toFixed(1));

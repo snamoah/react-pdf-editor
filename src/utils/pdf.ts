@@ -2,7 +2,7 @@ import { readAsArrayBuffer } from './asyncReader';
 import { getAsset } from './prepareAssets';
 import { normalize } from './helpers';
 
-export async function save(pdfFile: File, objects: any[], name: string) {
+export async function save(pdfFile: File, objects: AllObjects[], name: string) {
   const PDFLib = await getAsset('PDFLib');
   const download = await getAsset('download');
   let pdfDoc: {
