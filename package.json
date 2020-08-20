@@ -21,6 +21,11 @@
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build"
   },
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
