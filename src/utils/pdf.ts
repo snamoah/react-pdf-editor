@@ -25,7 +25,6 @@ export async function save(pdfFile: File, objects: AllObjects[], name: string) {
     const pageObjects = objects[pageIndex];
     // 'y' starts from bottom in PDFLib, use this to calculate y
     const pageHeight = page.getHeight();
-    const pageWidth = page.getWidth();
     const embedProcesses = pageObjects.map(async (object: Attachment) => {
       if (object.type === 'image') {
         const { file, x, y, width, height } = object as ImageObject;

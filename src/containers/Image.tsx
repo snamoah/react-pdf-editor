@@ -1,4 +1,4 @@
-import React, { useState, createRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DragActions } from '../entities';
 import { getMovePosition } from '../utils/helpers';
 import { Image as ImageComponent } from '../components/Image';
@@ -23,7 +23,7 @@ export const Image = ({
   pageHeight,
   updateImageObject,
 }: ImageObject & Props) => {
-  const canvasRef = createRef<HTMLCanvasElement>();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasWidth, setCanvasWidth] = useState(width);
   const [canvasHeight, setCanvasHeight] = useState(height);
   const [mouseDown, setMouseDown] = useState(false);
@@ -35,41 +35,6 @@ export const Image = ({
   );
 
   const [dimmerActive, setDimmerActive] = useState(false);
-
-  const renderImage = (img: HTMLImageElement) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const context = canvas.getContext('2d');
-    if (!context) return;
-
-    let scale = 1;
-    if (canvasWidth > IMAGE_MAX_SIZE) {
-      scale = IMAGE_MAX_SIZE / canvasWidth;
-    }
-
-    if (canvasHeight > IMAGE_MAX_SIZE) {
-      scale = Math.min(scale, IMAGE_MAX_SIZE / canvasHeight);
-    }
-
-    const newCanvasWidth = canvasWidth * scale;
-    const newCanvasHeight = canvasHeight * scale;
-
-    setCanvasWidth(newCanvasWidth);
-    setCanvasHeight(newCanvasHeight);
-
-    canvas.width = newCanvasWidth;
-    canvas.height = newCanvasHeight;
-
-    context.drawImage(payload, 0, 0, newCanvasWidth, newCanvasHeight);
-    canvas.toBlob((blob) => {
-      updateImageObject({
-        file: blob as File,
-        width: newCanvasWidth,
-        height: newCanvasHeight,
-      });
-    });
-  };
 
   const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -165,8 +130,43 @@ export const Image = ({
   };
 
   useEffect(() => {
+    const renderImage = (img: HTMLImageElement) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+  
+      const context = canvas.getContext('2d');
+      if (!context) return;
+  
+      let scale = 1;
+      if (canvasWidth > IMAGE_MAX_SIZE) {
+        scale = IMAGE_MAX_SIZE / canvasWidth;
+      }
+  
+      if (canvasHeight > IMAGE_MAX_SIZE) {
+        scale = Math.min(scale, IMAGE_MAX_SIZE / canvasHeight);
+      }
+  
+      const newCanvasWidth = canvasWidth * scale;
+      const newCanvasHeight = canvasHeight * scale;
+  
+      setCanvasWidth(newCanvasWidth);
+      setCanvasHeight(newCanvasHeight);
+  
+      canvas.width = newCanvasWidth;
+      canvas.height = newCanvasHeight;
+  
+      context.drawImage(payload, 0, 0, newCanvasWidth, newCanvasHeight);
+      canvas.toBlob((blob) => {
+        updateImageObject({
+          file: blob as File,
+          width: newCanvasWidth,
+          height: newCanvasHeight,
+        });
+      });
+    };
+
     renderImage(payload);
-  }, [payload, canvasWidth, canvasHeight]);
+  }, [payload, canvasWidth, canvasHeight, updateImageObject]);
 
   const handleClick = () => setDimmerActive(true);
   const onCancelDelete = () => setDimmerActive(false);
