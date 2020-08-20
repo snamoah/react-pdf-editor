@@ -1,7 +1,7 @@
 export enum DragActions {
-    MOVE = 'MOVE',
-    SCALE = 'SCALE',
-    NO_MOVEMENT = 'NO_MOVEMENT'
+  MOVE = 'MOVE',
+  SCALE = 'SCALE',
+  NO_MOVEMENT = 'NO_MOVEMENT',
 }
 
 export enum Color {
@@ -20,12 +20,12 @@ export enum Color {
 }
 
 export enum Attachment {
-    IMAGE = 'image',
-    DRAWING  = 'drawing',
-    TEXT = 'text',
+  IMAGE = 'image',
+  DRAWING = 'drawing',
+  TEXT = 'text',
 }
 
 export enum TextMode {
-    INSERT = 'insert',
-    COMMAND = 'command'
+  INSERT = 'insert',
+  COMMAND = 'command',
 }
