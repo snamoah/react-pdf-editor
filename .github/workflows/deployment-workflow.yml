@@ -11,7 +11,7 @@ jobs:
       - name: Install SSH Client
         uses: webfactory/ssh-agent@v0.2.0
         with:
-          ssh-private-key: ${{ secrets.SSH_HEY }}
+          ssh-private-key: ${{ secrets.SSH_KEY }}
       - name: Setup Github Configuration
         run: |
           git config --global user.email ${{ secrets.EMAIL }}
