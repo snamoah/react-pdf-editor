@@ -16,10 +16,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "eslint --ignore-path .gitignore 'src/**/*.ts' --color  -c ./.eslintrc.js",
+    "lint": "eslint --ignore-path .gitignore 'src/**/*.ts' --color --fix  -c ./.eslintrc.js",
     "eject": "react-scripts eject",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "prettier": "prettier --write **/**/*.{ts,tsx,json,md}"
   },
   "prettier": {
     "singleQuote": true,
