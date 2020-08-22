@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/react-pdf-editor/static/css/main.9559e866.chunk.css",
-    "main.js": "/react-pdf-editor/static/js/main.61cf628d.chunk.js",
-    "main.js.map": "/react-pdf-editor/static/js/main.61cf628d.chunk.js.map",
+    "main.js": "/react-pdf-editor/static/js/main.8c221419.chunk.js",
+    "main.js.map": "/react-pdf-editor/static/js/main.8c221419.chunk.js.map",
     "runtime-main.js": "/react-pdf-editor/static/js/runtime-main.b8140c16.js",
     "runtime-main.js.map": "/react-pdf-editor/static/js/runtime-main.b8140c16.js.map",
     "static/css/2.c7e42231.chunk.css": "/react-pdf-editor/static/css/2.c7e42231.chunk.css",
     "static/js/2.9614364a.chunk.js": "/react-pdf-editor/static/js/2.9614364a.chunk.js",
     "static/js/2.9614364a.chunk.js.map": "/react-pdf-editor/static/js/2.9614364a.chunk.js.map",
     "index.html": "/react-pdf-editor/index.html",
-    "precache-manifest.448f069f8af93f7ba882f36ac86aaa0e.js": "/react-pdf-editor/precache-manifest.448f069f8af93f7ba882f36ac86aaa0e.js",
+    "precache-manifest.854f5fe60f8f6c83aedf23165fb43224.js": "/react-pdf-editor/precache-manifest.854f5fe60f8f6c83aedf23165fb43224.js",
     "service-worker.js": "/react-pdf-editor/service-worker.js",
     "static/css/2.c7e42231.chunk.css.map": "/react-pdf-editor/static/css/2.c7e42231.chunk.css.map",
     "static/css/main.9559e866.chunk.css.map": "/react-pdf-editor/static/css/main.9559e866.chunk.css.map",
@@ -21,6 +21,6 @@
     "static/css/2.c7e42231.chunk.css",
     "static/js/2.9614364a.chunk.js",
     "static/css/main.9559e866.chunk.css",
-    "static/js/main.61cf628d.chunk.js"
+    "static/js/main.8c221419.chunk.js"
   ]
 }
