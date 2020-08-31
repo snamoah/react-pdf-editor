@@ -19,19 +19,19 @@ interface AttachmentBase {
   y: number;
   type: AttachmentType;
 }
-interface ImageObject extends AttachmentBase {
+interface ImageAttachment extends AttachmentBase {
   file: File;
-  payload: HTMLImageElement;
+  img: HTMLImageElement;
 }
 
-interface DrawingObject extends AttachmentBase {
+interface DrawingAttachment extends AttachmentBase {
   path?: string;
   scale?: number;
   stroke?: string;
   strokeWidth?: number;
 }
 
-interface TextObject extends AttachmentBase {
+interface TextAttachment extends AttachmentBase {
   text?: string;
   fontFamily?: string;
   size?: number;
@@ -46,8 +46,8 @@ interface Dimensions {
   height: number;
 }
 
-type Attachment = ImageObject | DrawingObject | TextObject;
+type Attachment = ImageAttachment | DrawingAttachment | TextAttachment;
 
-type AllObjects = Attachment[];
+type Attachments = Attachment[];
 
 type DragEventListener<T> = (e: React.MouseEvent<T>) => void;

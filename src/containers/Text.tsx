@@ -6,7 +6,7 @@ import { DragActions, TextMode } from '../entities';
 interface Props {
   pageWidth: number;
   pageHeight: number;
-  updateTextObject: (textObject: Partial<TextObject>) => void;
+  updateTextAttachment: (textObject: Partial<TextAttachment>) => void;
 }
 
 export const Text = ({
@@ -20,8 +20,8 @@ export const Text = ({
   fontFamily,
   pageHeight,
   pageWidth,
-  updateTextObject,
-}: TextObject & Props) => {
+  updateTextAttachment,
+}: TextAttachment & Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState(text || '');
   const [mouseDown, setMouseDown] = useState(false);
@@ -82,7 +82,7 @@ export const Text = ({
         pageHeight
       );
 
-      updateTextObject({
+      updateTextAttachment({
         x: left,
         y: top,
       });
@@ -115,7 +115,7 @@ export const Text = ({
     document.getSelection()?.removeAllRanges();
 
     const lines = [content];
-    updateTextObject({
+    updateTextAttachment({
       lines,
       text: content,
     });

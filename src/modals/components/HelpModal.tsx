@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Accordion, Icon, AccordionTitleProps } from 'semantic-ui-react';
-import { helpContent } from '../entities/helpContent';
+import { helpContent } from '../../entities/helpContent';
 interface Props {
   open: boolean;
   dismiss: () => void;
