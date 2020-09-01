@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { AttachmentTypes } from '../entities';
 import { Image } from '../containers/Image';
 import { Drawing } from '../containers/Drawing';
@@ -20,8 +20,10 @@ export const Attachments: React.FC<Props> = ({
     updateAttachment,
 }) => {
 
+    const updateAttachmentCallback = useCallback((index: number, attachment: Partial<Attachment>) => updateAttachment(index, attachment), [updateAttachment]);
+
     const handleAttachmentUpdate = (index: number) => (attachment: Partial<Attachment>) =>
-        updateAttachment(index, attachment);
+        updateAttachmentCallback(index, attachment);
 
     return attachments ? (
         <>

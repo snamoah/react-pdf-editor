@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export const useAttachments = () => {
   const [pageIndex, setPageIndex] = useState(-1);
@@ -11,23 +11,18 @@ export const useAttachments = () => {
     const pageAttachmentToSet = allPageAttachments[pageIndex];
 
     setPageAttachments(pageAttachmentToSet);
-    console.log('===> inside useEffect', pageIndex, pageAttachmentToSet);
   }, [pageIndex, allPageAttachments]);
 
   const add = (newAttachment: Attachment) => {
-    console.log('===> pageIndex', pageIndex);
     if (pageIndex === -1) {
       return;
     }
 
-    console.log('===> shefu', newAttachment);
     setAllPageAttachments(
       allPageAttachments.map((attachments, index) =>
         pageIndex === index ? [...attachments, newAttachment] : attachments
       )
     );
-
-    console.log('===> attachemnts', allPageAttachments);
   };
 
   const remove = useCallback(
@@ -55,11 +50,6 @@ export const useAttachments = () => {
         return;
       }
 
-      console.log(
-        '====> this is the root of all the evil',
-        pageAttachments,
-        allPageAttachments
-      );
       setAllPageAttachments(
         allPageAttachments.map((otherPageAttachments, index) =>
           pageIndex === index
@@ -78,12 +68,10 @@ export const useAttachments = () => {
   const reset = useCallback(
     (numberOfPages: number) => {
       setAllPageAttachments(Array(numberOfPages).fill([]));
-      console.log('===> reset attachment');
     },
     [setAllPageAttachments]
   );
 
-  console.log(pageIndex, pageAttachments, allPageAttachments);
   return {
     add,
     reset,

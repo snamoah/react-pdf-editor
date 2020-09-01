@@ -166,7 +166,7 @@ export const Image = ({
     };
 
     renderImage(img);
-  }, [img, canvasWidth, canvasHeight]);
+  }, [img, canvasWidth, canvasHeight, updateImageAttachment]);
 
   const handleClick = () => setDimmerActive(true);
   const onCancelDelete = () => setDimmerActive(false);
