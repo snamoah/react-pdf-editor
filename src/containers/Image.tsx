@@ -133,28 +133,28 @@ export const Image = ({
     const renderImage = (img: HTMLImageElement) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-  
+
       const context = canvas.getContext('2d');
       if (!context) return;
-  
+
       let scale = 1;
       if (canvasWidth > IMAGE_MAX_SIZE) {
         scale = IMAGE_MAX_SIZE / canvasWidth;
       }
-  
+
       if (canvasHeight > IMAGE_MAX_SIZE) {
         scale = Math.min(scale, IMAGE_MAX_SIZE / canvasHeight);
       }
-  
+
       const newCanvasWidth = canvasWidth * scale;
       const newCanvasHeight = canvasHeight * scale;
-  
+
       setCanvasWidth(newCanvasWidth);
       setCanvasHeight(newCanvasHeight);
-  
+
       canvas.width = newCanvasWidth;
       canvas.height = newCanvasHeight;
-  
+
       context.drawImage(img, 0, 0, newCanvasWidth, newCanvasHeight);
       canvas.toBlob((blob) => {
         updateImageAttachment({

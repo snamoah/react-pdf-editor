@@ -65,7 +65,7 @@ const App: React.FC<{}> = () => {
         addAttachment(newDrawingAttachment);
     }
 
-    useLayoutEffect(() => setPageIndex(pageIndex), [pageIndex]);
+    useLayoutEffect(() => setPageIndex(pageIndex), [pageIndex, setPageIndex]);
 
     const hiddenInputs = (
       <>

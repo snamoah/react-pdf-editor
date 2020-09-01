@@ -72,12 +72,16 @@ export const useAttachments = () => {
     [setAllPageAttachments]
   );
 
+  const setPageIndexHandler = useCallback((index) => setPageIndex(index), [
+    setPageIndex,
+  ]);
+
   return {
     add,
     reset,
     remove,
     update,
-    setPageIndex,
+    setPageIndex: setPageIndexHandler,
     pageAttachments,
     allPageAttachments,
     setAllPageAttachments,
