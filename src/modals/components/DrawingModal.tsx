@@ -1,6 +1,6 @@
 import React, { useState, createRef, useEffect } from 'react';
 import { Modal, Button, Menu, Dropdown, Label } from 'semantic-ui-react';
-import { Color } from '../entities';
+import { Color } from '../../entities';
 
 interface Props {
   open: boolean;
@@ -12,7 +12,7 @@ interface Props {
     strokeWidth: number;
     stroke: string;
   }) => void;
-  drawing?: DrawingObject;
+  drawing?: DrawingAttachment;
 }
 
 export const DrawingModal = ({ open, dismiss, confirm, drawing }: Props) => {

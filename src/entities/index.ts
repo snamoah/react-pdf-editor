@@ -19,7 +19,7 @@ export enum Color {
   BLACK = 'black',
 }
 
-export enum Attachment {
+export enum AttachmentTypes {
   IMAGE = 'image',
   DRAWING = 'drawing',
   TEXT = 'text',

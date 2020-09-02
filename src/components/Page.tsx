@@ -1,20 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
   page: any;
-  updateDimensions: ({
-    width,
-    height,
-  }: {
-    width: number;
-    height: number;
-  }) => void;
+  dimensions?: Dimensions;
+  updateDimensions: ({ width, height }: Dimensions) => void;
 }
 
-export const PdfPage = ({ page, updateDimensions }: Props) => {
+export const Page = ({ page, dimensions, updateDimensions }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [width, setWidth] = useState(500);
-  const [height, setHeight] = useState(window.innerHeight);
+  const [width, setWidth] = useState((dimensions && dimensions.width) || 0);
+  const [height, setHeight] = useState((dimensions && dimensions.height) || 0);
 
   useEffect(() => {
     const renderPage = async (p: Promise<any>) => {
@@ -22,23 +17,28 @@ export const PdfPage = ({ page, updateDimensions }: Props) => {
       if (_page) {
         const context = canvasRef.current?.getContext('2d');
         const viewport = _page.getViewport({ scale: 1 });
-  
+
         setWidth(viewport.width);
         setHeight(viewport.height);
-  
+
         if (context) {
           await _page.render({
             canvasContext: canvasRef.current?.getContext('2d'),
             viewport,
           }).promise;
-  
-          updateDimensions({ width: viewport.width, height: viewport.height });
+
+          const newDimensions = {
+            width: viewport.width,
+            height: viewport.height,
+          };
+
+          updateDimensions(newDimensions as Dimensions);
         }
       }
     };
 
     renderPage(page);
-  }, [page, width, height, updateDimensions]);
+  }, [page, updateDimensions]);
 
   return (
     <div>

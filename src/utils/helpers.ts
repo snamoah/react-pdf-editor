@@ -1,5 +1,3 @@
-const PADDING = 25;
-
 interface Position {
   top: number;
   left: number;
@@ -30,14 +28,14 @@ export const getMovePosition = (
   const top =
     newPositionTop < 0
       ? 0
-      : newPositionBottom > pageHeight + PADDING
-      ? pageHeight - height + PADDING
+      : newPositionBottom > pageHeight
+      ? pageHeight - height
       : newPositionTop;
   const left =
     newPositionLeft < 0
       ? 0
-      : newPositionRight > pageWidth + PADDING
-      ? pageWidth - width + PADDING
+      : newPositionRight > pageWidth
+      ? pageWidth - width
       : newPositionLeft;
 
   return {
