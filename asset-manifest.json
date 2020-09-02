@@ -1,26 +1,26 @@
 {
   "files": {
     "main.css": "/react-pdf-editor/static/css/main.9559e866.chunk.css",
-    "main.js": "/react-pdf-editor/static/js/main.8c221419.chunk.js",
-    "main.js.map": "/react-pdf-editor/static/js/main.8c221419.chunk.js.map",
+    "main.js": "/react-pdf-editor/static/js/main.b3c2f5de.chunk.js",
+    "main.js.map": "/react-pdf-editor/static/js/main.b3c2f5de.chunk.js.map",
     "runtime-main.js": "/react-pdf-editor/static/js/runtime-main.b8140c16.js",
     "runtime-main.js.map": "/react-pdf-editor/static/js/runtime-main.b8140c16.js.map",
-    "static/css/2.c7e42231.chunk.css": "/react-pdf-editor/static/css/2.c7e42231.chunk.css",
-    "static/js/2.9614364a.chunk.js": "/react-pdf-editor/static/js/2.9614364a.chunk.js",
-    "static/js/2.9614364a.chunk.js.map": "/react-pdf-editor/static/js/2.9614364a.chunk.js.map",
+    "static/css/2.825bb5ce.chunk.css": "/react-pdf-editor/static/css/2.825bb5ce.chunk.css",
+    "static/js/2.a31c93b6.chunk.js": "/react-pdf-editor/static/js/2.a31c93b6.chunk.js",
+    "static/js/2.a31c93b6.chunk.js.map": "/react-pdf-editor/static/js/2.a31c93b6.chunk.js.map",
     "index.html": "/react-pdf-editor/index.html",
-    "precache-manifest.854f5fe60f8f6c83aedf23165fb43224.js": "/react-pdf-editor/precache-manifest.854f5fe60f8f6c83aedf23165fb43224.js",
+    "precache-manifest.26dd499149bb8596ac23f82f736d28f9.js": "/react-pdf-editor/precache-manifest.26dd499149bb8596ac23f82f736d28f9.js",
     "service-worker.js": "/react-pdf-editor/service-worker.js",
-    "static/css/2.c7e42231.chunk.css.map": "/react-pdf-editor/static/css/2.c7e42231.chunk.css.map",
+    "static/css/2.825bb5ce.chunk.css.map": "/react-pdf-editor/static/css/2.825bb5ce.chunk.css.map",
     "static/css/main.9559e866.chunk.css.map": "/react-pdf-editor/static/css/main.9559e866.chunk.css.map",
-    "static/js/2.9614364a.chunk.js.LICENSE.txt": "/react-pdf-editor/static/js/2.9614364a.chunk.js.LICENSE.txt",
+    "static/js/2.a31c93b6.chunk.js.LICENSE.txt": "/react-pdf-editor/static/js/2.a31c93b6.chunk.js.LICENSE.txt",
     "static/media/semantic.min.css": "/react-pdf-editor/static/media/outline-icons.ef60a4f6.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.b8140c16.js",
-    "static/css/2.c7e42231.chunk.css",
-    "static/js/2.9614364a.chunk.js",
+    "static/css/2.825bb5ce.chunk.css",
+    "static/js/2.a31c93b6.chunk.js",
     "static/css/main.9559e866.chunk.css",
-    "static/js/main.8c221419.chunk.js"
+    "static/js/main.b3c2f5de.chunk.js"
   ]
 }
