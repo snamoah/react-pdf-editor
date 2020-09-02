@@ -36,10 +36,6 @@ const reducer = (state: State, action: Action) => {
 
   switch (action.type) {
     case ActionType.ADD_ATTACHMENT: {
-      if (pageIndex === -1) {
-        return state;
-      }
-
       const newAllPageAttachmentsAdd = allPageAttachments.map(
         (attachments, index) =>
           pageIndex === index
@@ -54,10 +50,6 @@ const reducer = (state: State, action: Action) => {
       };
     }
     case ActionType.REMOVE_ATTACHMENT: {
-      if (pageIndex === -1) {
-        return state;
-      }
-
       const newAllPageAttachmentsRemove = allPageAttachments.map(
         (otherPageAttachments, index) =>
           pageIndex === index
