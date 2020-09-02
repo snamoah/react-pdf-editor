@@ -31,10 +31,10 @@ const scripts: Script[] = [
   { name: 'w3Color', src: 'https://www.w3schools.com/lib/w3color.js' },
 ];
 
-const assets: { [key: string]: any } = {};
+const assets: Record<string, any> = {};
 export const getAsset = (scriptName: string) => assets[scriptName];
 
-export const prepareAssets = () => {
+export const prepareAssets = (): void => {
   // prepare scripts
   scripts.forEach(({ name, src }) => {
     assets[name] = new Promise((resolve, reject) => {

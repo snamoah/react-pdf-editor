@@ -2,7 +2,11 @@ import { readAsArrayBuffer } from './asyncReader';
 import { getAsset } from './prepareAssets';
 import { normalize } from './helpers';
 
-export async function save(pdfFile: File, objects: AllObjects[], name: string) {
+export async function save(
+  pdfFile: File,
+  objects: Attachments[],
+  name: string
+) {
   const PDFLib = await getAsset('PDFLib');
   const download = await getAsset('download');
   let pdfDoc: {
@@ -27,7 +31,7 @@ export async function save(pdfFile: File, objects: AllObjects[], name: string) {
     const pageHeight = page.getHeight();
     const embedProcesses = pageObjects.map(async (object: Attachment) => {
       if (object.type === 'image') {
-        const { file, x, y, width, height } = object as ImageObject;
+        const { file, x, y, width, height } = object as ImageAttachment;
         let img: any;
         try {
           if (file.type === 'image/jpeg') {
@@ -55,7 +59,7 @@ export async function save(pdfFile: File, objects: AllObjects[], name: string) {
           size,
           fontFamily,
           width,
-        } = object as TextObject;
+        } = object as TextAttachment;
         const pdfFont = await pdfDoc.embedFont(fontFamily);
         return () =>
           page.drawText(text, {
@@ -74,7 +78,7 @@ export async function save(pdfFile: File, objects: AllObjects[], name: string) {
           scale,
           stroke,
           strokeWidth,
-        } = object as DrawingObject;
+        } = object as DrawingAttachment;
         const {
           pushGraphicsState,
           setLineCap,

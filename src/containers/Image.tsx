@@ -9,20 +9,20 @@ interface Props {
   pageWidth: number;
   pageHeight: number;
   removeImage: () => void;
-  updateImageObject: (imageObject: Partial<ImageObject>) => void;
+  updateImageAttachment: (imageObject: Partial<ImageAttachment>) => void;
 }
 
 export const Image = ({
   x,
   y,
-  payload,
+  img,
   width,
   height,
   pageWidth,
   removeImage,
   pageHeight,
-  updateImageObject,
-}: ImageObject & Props) => {
+  updateImageAttachment,
+}: ImageAttachment & Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasWidth, setCanvasWidth] = useState(width);
   const [canvasHeight, setCanvasHeight] = useState(height);
@@ -83,14 +83,14 @@ export const Image = ({
         pageHeight
       );
 
-      updateImageObject({
+      updateImageAttachment({
         x: left,
         y: top,
       });
     }
 
     if (operation === DragActions.SCALE) {
-      updateImageObject({
+      updateImageAttachment({
         x: positionLeft,
         y: positionTop,
       });
@@ -133,31 +133,31 @@ export const Image = ({
     const renderImage = (img: HTMLImageElement) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-  
+
       const context = canvas.getContext('2d');
       if (!context) return;
-  
+
       let scale = 1;
       if (canvasWidth > IMAGE_MAX_SIZE) {
         scale = IMAGE_MAX_SIZE / canvasWidth;
       }
-  
+
       if (canvasHeight > IMAGE_MAX_SIZE) {
         scale = Math.min(scale, IMAGE_MAX_SIZE / canvasHeight);
       }
-  
+
       const newCanvasWidth = canvasWidth * scale;
       const newCanvasHeight = canvasHeight * scale;
-  
+
       setCanvasWidth(newCanvasWidth);
       setCanvasHeight(newCanvasHeight);
-  
+
       canvas.width = newCanvasWidth;
       canvas.height = newCanvasHeight;
-  
-      context.drawImage(payload, 0, 0, newCanvasWidth, newCanvasHeight);
+
+      context.drawImage(img, 0, 0, newCanvasWidth, newCanvasHeight);
       canvas.toBlob((blob) => {
-        updateImageObject({
+        updateImageAttachment({
           file: blob as File,
           width: newCanvasWidth,
           height: newCanvasHeight,
@@ -165,8 +165,8 @@ export const Image = ({
       });
     };
 
-    renderImage(payload);
-  }, [payload, canvasWidth, canvasHeight, updateImageObject]);
+    renderImage(img);
+  }, [img, canvasWidth, canvasHeight, updateImageAttachment]);
 
   const handleClick = () => setDimmerActive(true);
   const onCancelDelete = () => setDimmerActive(false);

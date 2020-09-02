@@ -7,7 +7,7 @@ interface Props {
   pageWidth: number;
   pageHeight: number;
   removeDrawing: () => void;
-  updateDrawingObject: (drawingObject: Partial<DrawingObject>) => void;
+  updateDrawingAttachment: (drawingObject: Partial<DrawingAttachment>) => void;
 }
 
 export const Drawing = ({
@@ -21,8 +21,8 @@ export const Drawing = ({
   pageWidth,
   pageHeight,
   removeDrawing,
-  updateDrawingObject,
-}: DrawingObject & Props) => {
+  updateDrawingAttachment,
+}: DrawingAttachment & Props) => {
   const svgRef = createRef<SVGSVGElement>();
   const [mouseDown, setMouseDown] = useState(false);
   const [positionTop, setPositionTop] = useState(y);
@@ -80,14 +80,14 @@ export const Drawing = ({
         pageHeight
       );
 
-      updateDrawingObject({
+      updateDrawingAttachment({
         x: left,
         y: top,
       });
     }
 
     if (operation === DragActions.SCALE) {
-      updateDrawingObject({
+      updateDrawingAttachment({
         x: positionLeft,
         y: positionTop,
       });
