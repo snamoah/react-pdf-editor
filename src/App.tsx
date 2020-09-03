@@ -14,7 +14,7 @@ import { Empty } from './components/Empty';
 import { Page } from './components/Page';
 import { Attachments } from './components/Attachments';
 
-const App: React.FC<{}> = () => {
+const App: React.FC = () => {
     const [helpModalOpen, setHelpModalOpen] = useState(false);
     const [drawingModalOpen, setDrawingModalOpen] = useState(false);
     const { file, initialize, pageIndex, isMultiPage, isFirstPage, isLastPage, currentPage, isSaving, savePdf, previousPage, nextPage, setDimensions, name, dimensions } = usePdf();

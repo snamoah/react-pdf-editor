@@ -6,7 +6,12 @@ interface Props {
   uploadPdf: () => void;
 }
 export const Empty: React.FC<Props> = ({ loading, uploadPdf }) => (
-  <Segment placeholder loading={loading} style={{ height: '80vh' }}>
+  <Segment 
+    data-testid='empty-container'
+    placeholder 
+    loading={loading} 
+    style={{ height: '80vh' }}
+  >
     <Header icon>
       <Icon name="file pdf outline" />
       Upload your PDF to start editing!
