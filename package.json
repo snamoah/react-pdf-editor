@@ -9,13 +9,12 @@
     "react-scripts": "3.4.1",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^1.1.1",
-    "styled-components": "^5.1.1",
-    "typescript": "~3.7.2"
+    "styled-components": "^5.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
     "lint": "eslint --ignore-path .gitignore 'src/**/*.ts' --color --fix  -c ./.eslintrc.js",
     "eject": "react-scripts eject",
     "predeploy": "yarn run build",
@@ -54,9 +53,9 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
+    "@testing-library/jest-dom": "5.11.4",
+    "@testing-library/react": "11.0.2",
+    "@testing-library/user-event": "12.1.3",
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
@@ -66,7 +65,9 @@
     "@typescript-eslint/parser": "^3.9.1",
     "gh-pages": "^3.1.0",
     "husky": "^4.2.5",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
     "lint-staged": "^10.2.11",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "typescript": "^4.0.2"
   }
 }

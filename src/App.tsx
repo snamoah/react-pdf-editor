@@ -14,7 +14,7 @@ import { Empty } from './components/Empty';
 import { Page } from './components/Page';
 import { Attachments } from './components/Attachments';
 
-const App: React.FC<{}> = () => {
+const App: React.FC = () => {
     const [helpModalOpen, setHelpModalOpen] = useState(false);
     const [drawingModalOpen, setDrawingModalOpen] = useState(false);
     const { file, initialize, pageIndex, isMultiPage, isFirstPage, isLastPage, currentPage, isSaving, savePdf, previousPage, nextPage, setDimensions, name, dimensions } = usePdf();
@@ -70,6 +70,7 @@ const App: React.FC<{}> = () => {
     const hiddenInputs = (
       <>
         <input
+          data-testid="pdf-input"
           ref={pdfInput}
           type="file"
           name="pdf"
@@ -124,8 +125,9 @@ const App: React.FC<{}> = () => {
                     )}
                   </Grid.Column>
                   <Grid.Column width={10}>
-                      { currentPage && (
-                        <Segment
+                    { currentPage && (
+                      <Segment
+                        data-testid="page"
                         compact
                         stacked={isMultiPage && !isLastPage}
                       >

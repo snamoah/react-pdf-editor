@@ -15,10 +15,10 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v1
         with:
-          node-version: 10.x
+          node-version: 12.x
       - name: Install dependencies
         run: yarn
+      - name: Run Lint
+        run: yarn lint
       - name: Run Tests
-        run: |
-          yarn lint
-          yarn test
+        run: yarn test

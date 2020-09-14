@@ -20,7 +20,13 @@ export const HelpModal: React.FC<Props> = ({ open, dismiss }) => {
 
   return (
     <>
-      <Modal open={open} onClose={dismiss} size="small" dimmer="inverted">
+      <Modal 
+        open={open} 
+        onClose={dismiss} 
+        size="small" 
+        dimmer="inverted"
+        data-testid="help-modal"
+      >
         <Modal.Header>
           <Icon name="question" />
           FAQ
