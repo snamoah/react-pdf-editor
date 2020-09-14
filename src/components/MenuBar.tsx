@@ -27,7 +27,12 @@ export const MenuBar: React.FC<Props> = ({
     <Menu.Menu position="right">
       {isPdfLoaded && (
         <>
-          <Dropdown item closeOnBlur icon="edit outline" simple>
+          <Dropdown 
+            data-testid='edit-menu-dropdown'
+            item 
+            closeOnBlur 
+            icon="edit outline" simple
+          >
             <Dropdown.Menu>
               <Dropdown.Item onClick={addText}>Add Text</Dropdown.Item>
               <Dropdown.Item onClick={addImage}>Add Image</Dropdown.Item>
@@ -35,14 +40,19 @@ export const MenuBar: React.FC<Props> = ({
             </Dropdown.Menu>
           </Dropdown>
           <Menu.Item
+            data-testid='save-menu-item'
             name={savingPdfStatus ? 'Saving...' : 'Save'}
             disabled={savingPdfStatus}
             onClick={savePdf}
           />
-          <Menu.Item name="Upload New" onClick={uploadNewPdf} />
+          <Menu.Item
+            data-testid='upload-menu-item' 
+            name="Upload New" 
+            onClick={uploadNewPdf} 
+          />
         </>
       )}
-      <Menu.Item onClick={openHelp}>
+      <Menu.Item data-testid="help-menu-item" onClick={openHelp}>
         <Icon name="question circle outline" />
       </Menu.Item>
     </Menu.Menu>

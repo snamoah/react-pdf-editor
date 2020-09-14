@@ -70,6 +70,7 @@ const App: React.FC = () => {
     const hiddenInputs = (
       <>
         <input
+          data-testid="pdf-input"
           ref={pdfInput}
           type="file"
           name="pdf"
@@ -124,8 +125,9 @@ const App: React.FC = () => {
                     )}
                   </Grid.Column>
                   <Grid.Column width={10}>
-                      { currentPage && (
-                        <Segment
+                    { currentPage && (
+                      <Segment
+                        data-testid="page"
                         compact
                         stacked={isMultiPage && !isLastPage}
                       >
